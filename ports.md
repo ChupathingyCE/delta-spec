@@ -6,7 +6,7 @@ port plays with everyone": Chupathingy on PC, Mac, Linux, Android and the
 consoles, and every other build that speaks the game protocol. The facts are
 in the spec pages it links to; this page says which ones you need, in what
 order, and how to test them. It comes with a small reference client in C
-([tools/delta-ref](../../tools/delta-ref)), a script that checks your
+([reference/](reference/)), a script that checks your
 packets, and a script that runs our dedicated server on your own machine to
 test against.
 
@@ -237,7 +237,7 @@ are covered.
 
 ## Testing your port
 
-The kit is in [tools/delta-ref](../../tools/delta-ref):
+The kit is in [reference/](reference/) (MIT):
 
 | File | What it is |
 | --- | --- |
@@ -250,7 +250,7 @@ The kit is in [tools/delta-ref](../../tools/delta-ref):
 **Build and test the reference client** (any C99 compiler; one command):
 
 ```sh
-make -C tools/delta-ref
+make -C reference
 ```
 
 To use it, compile `delta_ref.c` into your port. You give it the time in
@@ -291,9 +291,9 @@ playing plainly; `delta.room_players` is the room's limit from the roster.
 hex, one a line, and run:
 
 ```sh
-python3 tools/delta-ref/conformance.py check my-port-packets.txt
-python3 tools/delta-ref/conformance.py advert 2c0001000000000000000000000000000000000000000000000000
-python3 tools/delta-ref/conformance.py listen --seconds 60
+python3 reference/conformance.py check my-port-packets.txt
+python3 reference/conformance.py advert 2c00010000000000000000000000000000000000000000000000
+python3 reference/conformance.py listen --seconds 60
 ```
 
 `listen` is a stand-in host on 127.0.0.1:5160: it answers HELLO with
@@ -304,7 +304,7 @@ no game.
 machine with the server program and your maps:
 
 ```sh
-tools/delta-ref/loopback_host.sh --server path/to/chupathingyce-server --maps path/to/data \
+reference/loopback_host.sh --server path/to/chupathingyce-server --maps path/to/data \
     --map bloodgulch --gametype slayer --announce 44 --broadcast 127.0.0.2
 ```
 
@@ -325,7 +325,7 @@ defaults, and the script's settings win over it.
 
 ## Your build passes if
 
-- [ ] `make -C tools/delta-ref` passes on your machine (or your port's own
+- [ ] `make -C reference` passes on your machine (or your port's own
       build of `delta_ref.c` passes `delta_ref_test.c`), big-endian ports
       included.
 - [ ] Your HELLO passes `conformance.py check`: magic, major 1, exact

@@ -1,14 +1,13 @@
 /*
-SPDX-FileCopyrightText: 2026 The Chupathingy contributors
 SPDX-FileCopyrightText: 2026 Milenko x Horrible Dev
-SPDX-License-Identifier: GPL-3.0-or-later
+SPDX-License-Identifier: MIT
 
 DELTA_REF_TEST.C
 
 The reference client's tests: its bytes against golden.h (bytes the game's
 own Delta code wrote), its readers on those bytes, the handshake's timing
 and answers, and every reader fed random and cut-short input. Needs only the
-C library: `make test` in tools/delta-ref.
+C library: `make test` in reference/.
 */
 
 #include "delta_ref.h"

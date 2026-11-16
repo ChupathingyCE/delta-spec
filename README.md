@@ -1,28 +1,66 @@
 # Delta
 
-Delta is Chupathingy's network: the part of Halo online that the original
-game never had.
+Delta is an open network layer for Halo: the part of Halo online that the
+original game never had. These pages are its specification. They are given
+to the wider community, and anyone may build a client, server, port or tool
+that speaks it.
 
-## For players
+This repository holds the spec only. It is separate from any
+implementation.
 
-When you play online, your game talks to the host in Halo's own game
-protocol, the one every port of the game shares. Delta rides beside it. It
-lets games tell each other what platform they're on, keep a game small
-enough for an Xbox or an N64, share chat and voice, check that everyone has
-the same map, show verified names, and list games on the game list. It also
-keeps your stats and your profile on the site, if you want that.
+## Two wires
 
-You don't need an account to play. A game without Delta (another port, an
-older build) still plays with everyone: it just doesn't get the extras.
-Nothing here ever shows your address to anyone.
+Every Halo port already shares one thing: the game's own protocol (the
+"legacy" protocol, versioned by a network number). Delta never replaces it.
+It runs beside it:
 
-How to get online: [Playing online](https://github.com/ChupathingyCE/chupathingyce/blob/main/docs/online.md).
+1. **The game protocol**, unchanged. Every machine in a game speaks it, with
+   or without Delta.
+2. **Delta**, beside it: its own messages between the machines of a game
+   (Delta Peer), and optional services for lists, stats, profiles and
+   server control.
+
+A game, port or server without Delta still plays with everyone: it just
+doesn't get the extras.
+
+## Who it's for
+
+Any port, fork or community that wants its players in one player base:
+desktop builds, console and handheld ports, dedicated servers, game lists,
+stats sites and tools. Nothing in the spec depends on being any one
+project, and nothing is secret but signing keys.
+
+## Implementations
+
+| Implementation | What it is | Status |
+| --- | --- | --- |
+| [Chupathingy](https://github.com/ChupathingyCE/chupathingyce) | the game (PC, Mac, Linux, Android, consoles) and its dedicated server | implements Peer, List, Stats, Control and Link |
+| delta-server | a reference network: site, list, stats and accounts anyone can run | planned |
+| yours | any port, fork or tool | welcome: see [ports.md](ports.md) and [CONTRIBUTING.md](CONTRIBUTING.md) |
+
+Chupathingy's game repository checks itself against this spec: a test
+there fails when [registry.json](registry.json) and the game's code
+disagree, and the reference client's golden packets are checked against
+the hex examples in [peer.md](peer.md). How Chupathingy implements the spec
+(settings, menus, files) is on its own side:
+[delta-implementation.md](https://github.com/ChupathingyCE/chupathingyce/blob/main/docs/delta-implementation.md).
+Paragraphs marked **Chupathingy notes** in these pages describe that
+implementation and are not part of the spec.
+
+## Status
+
+| Part | Status |
+| --- | --- |
+| Delta Peer | in use |
+| Delta List | in use |
+| Delta Stats | in use |
+| Delta Control | in use |
+| Delta Link | in use |
+| Registry | in use; new numbers by pull request |
+| Federation | proposal |
+| Social (friends, presence, parties, clans, voice) | draft, being written |
 
 ## For developers
-
-Delta is open. These pages are its specification, and anyone may build a
-client, server, port or tool that speaks it. Nothing in it depends on being
-Chupathingy, and nothing is secret but signing keys.
 
 Delta has one rule above all: **the player base stays whole.** The legacy
 game protocol is the common ground. Delta starts beside it, and when a
@@ -30,6 +68,8 @@ capability changes the game itself, every part of Delta still falls back,
 per machine, to the plain game protocol for a machine that doesn't share
 it. A room-wide capability (one every machine must have) is on only while
 every machine in the game has it.
+
+Changes are additive. An old version is never dropped.
 
 ### The parts
 
@@ -43,6 +83,11 @@ Delta is one name for parts that cross different trust boundaries:
 | **Delta Control** | an admin or moderator, and a server | roles, commands, the control API, in-game moderation | [control.md](control.md) |
 | **Delta Link** | a player or server, and the site | profiles, devices, linking with a code, clans | [link.md](link.md) |
 
+"The site" in these pages is a network's web service: the other end of
+Delta List, Stats and Link. Chupathingy's network runs one at
+`stats.chupathingy.org`; [federation.md](federation.md) proposes how other
+networks run their own.
+
 The legacy number (the game protocol's network version) is not part of
 Delta. Delta works around it: [versioning.md](versioning.md).
 
@@ -53,7 +98,7 @@ Delta. Delta works around it: [versioning.md](versioning.md).
       \\  <==================================================>    //
        \\                                                       //
         \\  Delta List / Stats / Link (HTTPS)       Delta List / Stats / Link
-         `------------------->  stats.chupathingy.org  <-------------'
+         `------------------->     the site     <--------------------'
                                       ^
                                       | Delta Link (server dials out)
                                       |
@@ -80,10 +125,8 @@ of a game.
 | [security.md](security.md) | how Delta treats hostile input, and where each part's checks are |
 | [ports.md](ports.md) | a port's path to playing with everyone, with the reference client and its tools |
 | [federation.md](federation.md) | proposal: other networks running their own accounts and servers, with names checked across all of them |
-| [MOVING.md](MOVING.md) | which files make up the spec, and which are the game's |
-
-How Chupathingy's own game and server implement all of this (settings,
-menus, files) is on the game side: [delta-implementation.md](https://github.com/ChupathingyCE/chupathingyce/blob/main/docs/delta-implementation.md).
+| [social/](social/README.md) | draft: friends, presence, invites and joins, parties, clans, voice |
+| [MOVING.md](MOVING.md) | what lives in this repository, and what stays with the game |
 
 ### How it meets everything else
 
@@ -99,3 +142,23 @@ menus, files) is on the game side: [delta-implementation.md](https://github.com/
 - **Halo Custom Edition 1.0.10** players are outside Delta. Nothing of them
   reaches Delta Peer or the legacy number.
 - **The site** is the other end of Delta List, Stats and Link.
+
+## Links
+
+| Where | What |
+| --- | --- |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | how to propose a change or ask for a number |
+| [MAINTAINERS.md](MAINTAINERS.md) | who keeps the spec |
+| [CHANGELOG.md](CHANGELOG.md) | what changed, by date |
+| [Chupathingy](https://github.com/ChupathingyCE/chupathingyce) | the game, the first implementation |
+| [Reference client](reference/) | a small C client with golden packets and a conformance script (MIT) |
+| [Playing online](https://github.com/ChupathingyCE/chupathingyce/blob/main/docs/online.md) | for players: how to get online with Chupathingy |
+
+## License
+
+The spec text is licensed under
+[Creative Commons Attribution 4.0 International](LICENSE) (CC BY 4.0).
+Code samples, hex examples and [registry.json](registry.json) written for
+this spec are also offered under the MIT License, so an implementation may
+copy them into its own code under either license. The reference client in
+[reference/](reference/) is MIT ([reference/LICENSE](reference/LICENSE)).

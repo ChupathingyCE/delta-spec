@@ -330,7 +330,7 @@ address and port, of its session. Everything else is dropped and counted.
 ## Examples
 
 These are real datagrams, written by our own code and kept as the reference
-client's golden packets ([golden.h](../../tools/delta-ref/golden.h)). A test
+client's golden packets ([golden.h](reference/golden.h)). A test
 checks every block below against them byte for byte, so this page can't
 drift from the code. The session is 0x1234abcd in each.
 
@@ -730,11 +730,11 @@ of Delta's goes into the game protocol.
     machine's index, never its address); nothing about chat ever ends a
     connection.
 
-The game's side is `port/linux/game/chat.c` (keys, the log, routing, the
-bridge), `port/linux/src/delta_chat.c` (the filter and the host's rules)
-and `port/linux/src/delta_chat_bridge.c` (OpenCE's entries, the text's
-conversion, the bridge's checks), both tested in `delta_test.c`, and the dedicated server's `sv_say`, `sv_chat`, `sv_mute`
-and `sv_unmute`.
+> **Chupathingy notes.** The game's side is `port/linux/game/chat.c` (keys, the log, routing, the
+> bridge), `port/linux/src/delta_chat.c` (the filter and the host's rules)
+> and `port/linux/src/delta_chat_bridge.c` (OpenCE's entries, the text's
+> conversion, the bridge's checks), both tested in `delta_test.c`, and the dedicated server's `sv_say`, `sv_chat`, `sv_mute`
+> and `sv_unmute`.
 
 ## Game modes
 
@@ -851,9 +851,9 @@ ask goes over Delta Peer and the change itself through the game:
   start the round on the new team. A bomb carrier keeps the bomb for their
   own team until then (their death drops it; a new round takes it back).
 
-The game's side is `port/linux/game/team_change.c`, its pause menu row in
-all the menu sets, and the dedicated
-server's settings and `sv_team`.
+> **Chupathingy notes.** The game's side is `port/linux/game/team_change.c`, its pause menu row in
+> all the menu sets, and the dedicated
+> server's settings and `sv_team`.
 
 ## Host rules
 
@@ -899,8 +899,8 @@ game, over `host_rules` (bit 19):
   without Delta) gets the Xbox's rules: no extras. A game played alone
   (split screen) is its own host's.
 
-The game's side is `port/linux/game/host_rules.c` and
-`port/linux/game/late_join.c`.
+> **Chupathingy notes.** The game's side is `port/linux/game/host_rules.c` and
+> `port/linux/game/late_join.c`.
 
 ## Reports
 
@@ -961,9 +961,9 @@ device token):
   refuses a body that isn't an MP4 (its top-level boxes, `ftyp` first and
   a `moov`), and drops an upload that sends nothing for a minute.
 
-The game's side is `port/linux/game/report_player.c` (the Delta Guide's PLAYERS
-HERE and the scoreboard's REPORT), the dedicated server's
-`server/src/server_reports.c` (`sv_reports`, the control panel's Reports).
+> **Chupathingy notes.** The game's side is `port/linux/game/report_player.c` (the Delta Guide's PLAYERS
+> HERE and the scoreboard's REPORT), the dedicated server's
+> `server/src/server_reports.c` (`sv_reports`, the control panel's Reports).
 
 ## Server badges
 
@@ -985,9 +985,9 @@ one is issued are in [server-badges.md](https://github.com/ChupathingyCE/chupath
   then on, whatever the list says; one that proves a badge shows the
   list's only while the list names the same tier, label and server key.
 
-The game's side is `port/linux/src/server_badge.c` and
-`port/linux/src/delta_peer_game.c`; the dedicated server's certificate is
-`server_badge.cert` in its data folder.
+> **Chupathingy notes.** The game's side is `port/linux/src/server_badge.c` and
+> `port/linux/src/delta_peer_game.c`; the dedicated server's certificate is
+> `server_badge.cert` in its data folder.
 
 ## Voice
 
@@ -1061,14 +1061,14 @@ the site.
   0.12 ms a frame on an Apple M4 (0.6% of a core while talking), decoding
   about 0.015 ms a frame for each speaker heard.
 
-The game's side is `port/linux/game/voice_game.c` (the channels, the host's
-rules and its view of the game), `port/linux/src/voice.c` (the microphone,
-Opus and the voices' playback, through the game's mixer, `dsound_sdl.c`)
-and `port/linux/src/voice_jitter.c`; Delta Peer's checks and routing are in
-`delta_peer.c`, all tested in `delta_test.c` and
-`voice_test.c`. A dedicated server relays without any audio or Opus of its
-own. The consoles leave voice out for now: a
-console is never sent any.
+> **Chupathingy notes.** The game's side is `port/linux/game/voice_game.c` (the channels, the host's
+> rules and its view of the game), `port/linux/src/voice.c` (the microphone,
+> Opus and the voices' playback, through the game's mixer, `dsound_sdl.c`)
+> and `port/linux/src/voice_jitter.c`; Delta Peer's checks and routing are in
+> `delta_peer.c`, all tested in `delta_test.c` and
+> `voice_test.c`. A dedicated server relays without any audio or Opus of its
+> own. The consoles leave voice out for now: a
+> console is never sent any.
 
 ## Party teams
 
@@ -1115,10 +1115,10 @@ places the party as it always did.
   overrides them. A client that doesn't speak `party_teams` sends nothing
   and is placed as before.
 
-The host's side is `port/linux/game/party_teams.c` (which change: the
-plan in `port/linux/src/party_teams_plan.c`, tested by
-`tools/test_party_teams.py`); the members' tag comes from
-`port/linux/game/guide.c`.
+> **Chupathingy notes.** The host's side is `port/linux/game/party_teams.c` (which change: the
+> plan in `port/linux/src/party_teams_plan.c`, tested by
+> `tools/test_party_teams.py`); the members' tag comes from
+> `port/linux/game/guide.c`.
 
 ## Object sync
 
@@ -1183,9 +1183,9 @@ the map and the report):
   after the next. A name the host never had an object of is not listed,
   and the client keeps its own copy of it as above.
 
-It is offered by the builds with the game list (`HALO_GAME_BROWSER`: the
-desktop builds, Android, the Switch and the dedicated server), not by the
-original Xbox's. The game's side is `port/linux/game/network_objects.c`.
+> **Chupathingy notes.** It is offered by the builds with the game list (`HALO_GAME_BROWSER`: the
+> desktop builds, Android, the Switch and the dedicated server), not by the
+> original Xbox's. The game's side is `port/linux/game/network_objects.c`.
 
 ## Verified names
 

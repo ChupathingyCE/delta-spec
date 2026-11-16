@@ -1,6 +1,5 @@
-# SPDX-FileCopyrightText: 2026 The Chupathingy contributors
 # SPDX-FileCopyrightText: 2026 Milenko x Horrible Dev
-# SPDX-License-Identifier: GPL-3.0-or-later
+# SPDX-License-Identifier: MIT
 #
 # The Delta reference client. `make` builds delta_ref.o and runs the tests;
 # a port compiles delta_ref.c into its own build instead. Build output goes in

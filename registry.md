@@ -44,8 +44,8 @@ is in [peer.md](peer.md#platform-policy).
 ### How to ask for a number
 
 Open an issue on
-[ChupathingyCE/chupathingyce](https://github.com/ChupathingyCE/chupathingyce/issues)
-(or ask on our Discord) with the platform, your port's name and link,
+[ChupathingyCE/delta-spec](https://github.com/ChupathingyCE/delta-spec/issues)
+(or ask on Chupathingy's Discord) with the platform, your port's name and link,
 roughly how much memory the game gets there, how many players it handles
 joining and hosting (0 if it never hosts), and whether it plays network
 co-op. We add the number here, to the game and to the site, and tell you

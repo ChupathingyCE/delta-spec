@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
-# SPDX-FileCopyrightText: 2026 The Chupathingy contributors
 # SPDX-FileCopyrightText: 2026 Milenko x Horrible Dev
-# SPDX-License-Identifier: GPL-3.0-or-later
+# SPDX-License-Identifier: MIT
 #
 # A Chupathingy dedicated server for testing a port against, on 127.0.0.1
 # alone: never listed, never public, nothing announced anywhere.
@@ -11,7 +10,7 @@
 #                    [--broadcast 127.0.0.Y,...] [--work DIR] [--seconds N]
 #
 #   --server    the server program (chupathingyce-server from a release, or
-#               build/.../chupathingyce-server from this repository)
+#               build/.../chupathingyce-server from the game's repository)
 #   --maps      your data folder: maps/ (with ui.map and the map), and
 #               maps_ce/ and the others if you use them. Linked, never copied
 #               or written to.
