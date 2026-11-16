@@ -1,5 +1,7 @@
 # Delta
 
+> **Draft for discussion.** This is the work Chupathingy already has, separated out so other projects can read it and shape a shared spec. Nothing here is final: open an issue for anything that should be in, out or different.
+
 Delta is an open network layer for Halo: the part of Halo online that the
 original game never had. These pages are its specification. They are given
 to the wider community, and anyone may build a client, server, port or tool
