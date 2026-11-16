@@ -14,5 +14,7 @@
   `conformance.py` expects (it had one byte too many).
 - Links into the game's repository are now full URLs, and notes about
   Chupathingy's own implementation are marked **Chupathingy notes**.
-- Added [CONTRIBUTING.md](CONTRIBUTING.md), [MAINTAINERS.md](MAINTAINERS.md)
-  and a placeholder for the social parts ([social/](social/README.md)).
+- Added [CONTRIBUTING.md](CONTRIBUTING.md) and [MAINTAINERS.md](MAINTAINERS.md).
+- Added Delta Social ([social/](social/README.md), draft): friends,
+  presence, invites, parties, party chat, chat, voice, clans, platforms and
+  moderation.

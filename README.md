@@ -58,7 +58,7 @@ implementation and are not part of the spec.
 | Delta Link | in use |
 | Registry | in use; new numbers by pull request |
 | Federation | proposal |
-| Social (friends, presence, parties, clans, voice) | draft, being written |
+| Delta Social | draft; most of it in use, some parts proposed |
 
 ## For developers
 
@@ -82,6 +82,7 @@ Delta is one name for parts that cross different trust boundaries:
 | **Delta Stats** | a host or player, and the site | end-of-game reports and the event stream | [stats.md](stats.md) |
 | **Delta Control** | an admin or moderator, and a server | roles, commands, the control API, in-game moderation | [control.md](control.md) |
 | **Delta Link** | a player or server, and the site | profiles, devices, linking with a code, clans | [link.md](link.md) |
+| **Delta Social** | players, through the site and in one game | friends, presence, invites, parties, chat, voice, clans, moderation | [social/](social/README.md) |
 
 "The site" in these pages is a network's web service: the other end of
 Delta List, Stats and Link. Chupathingy's network runs one at
@@ -125,7 +126,7 @@ of a game.
 | [security.md](security.md) | how Delta treats hostile input, and where each part's checks are |
 | [ports.md](ports.md) | a port's path to playing with everyone, with the reference client and its tools |
 | [federation.md](federation.md) | proposal: other networks running their own accounts and servers, with names checked across all of them |
-| [social/](social/README.md) | draft: friends, presence, invites and joins, parties, clans, voice |
+| [social/](social/README.md) | Delta Social (draft): friends, presence, invites and joins, parties, party chat, chat, voice, clans, platforms, moderation |
 | [MOVING.md](MOVING.md) | what lives in this repository, and what stays with the game |
 
 ### How it meets everything else

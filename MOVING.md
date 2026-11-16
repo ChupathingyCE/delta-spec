@@ -13,7 +13,7 @@ single page the spec started as, now `README.md`'s history), the
 | `README.md`, `peer.md`, `versioning.md`, `list.md`, `stats.md`, `control.md`, `link.md`, `clients.md`, `security.md`, `ports.md`, `federation.md` | the spec (CC BY 4.0) |
 | `registry.md`, `registry.json` | every assigned number |
 | `reference/` | the reference client, its golden packets (`golden.h`), `conformance.py` and `loopback_host.sh` (MIT) |
-| `social/` | the social parts, being written |
+| `social/` | Delta Social (draft) |
 | `CONTRIBUTING.md`, `MAINTAINERS.md`, `CHANGELOG.md`, `LICENSE` | how the spec is kept |
 
 ## Chupathingy's repository
