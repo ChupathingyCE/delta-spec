@@ -51,7 +51,3 @@ registry rather than storing it.
 
 Platform numbers stay one registry for every network, so a logo means the
 same everywhere. A new platform asks the registry, not a network.
-
-> **Implementation note (Chupathingy's network):** the site's own list of
-> keys has to be updated with each registry change; as of this writing it
-> lacks `dreamcast` (22), so a party member on it shows as unknown.

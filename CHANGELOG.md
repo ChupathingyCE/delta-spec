@@ -1,5 +1,18 @@
 # Changelog
 
+## 2026-11-17
+
+- Delta is the name of the shared spec; Chupathingy is one implementation
+  ([README.md](README.md), [federation.md](federation.md)). The name is
+  open to change.
+- The implementations table lists delta-server (a reference node, draft)
+  and Chupathingy's Social.
+- The **Chupathingy notes** paragraphs moved to Chupathingy's own
+  documentation; notes about one implementation stay out of the spec pages
+  ([CONTRIBUTING.md](CONTRIBUTING.md)).
+- Removed a stale note in [social/platform.md](social/platform.md): the
+  site lists `dreamcast` (22) now.
+
 ## 2026-11-16
 
 - The spec moved here from the `docs/delta/` folder of
