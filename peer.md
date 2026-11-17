@@ -177,6 +177,7 @@ Each platform has a policy row, the defaults its key starts from:
 | Legacy PC (DOS, Windows 9x) | 16 | 16 | 128 | 7 (placeholder) | no |
 | Steam Link | 0 (doesn't host yet) | 16 | 128 | 8 | no |
 | iOS, Apple TV | 128 | 128 | 128 | 11 (2 GB) | yes |
+| Dreamcast | 0 (never hosts) | 8 | 16 | 4 (16 MB) | no |
 
 A host protects the weakest machine of its game. It takes no more players
 than the smallest of its own hosting limit and every Delta machine's join

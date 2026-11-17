@@ -94,7 +94,8 @@ enum
 	DREF_CAP_VOICE = 22,
 	DREF_CAP_REPORTS = 23,
 	DREF_CAP_MCC_MAPS = 24,
-	DREF_CAP_GAME_MODES = 25
+	DREF_CAP_GAME_MODES = 25,
+	DREF_CAP_LOBBY_READY = 26
 };
 
 /* the bits a HELLO or WELCOME never carries (retired, or the list's alone) */

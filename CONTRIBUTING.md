@@ -30,6 +30,27 @@ The spec belongs to everyone who builds on it. Anyone may propose a change.
   your own build and send it: ask first, and send 0 (unknown) until it's
   assigned. Numbers are never reused.
 
+## Numbers
+
+The registry ([registry.md](registry.md), [registry.json](registry.json))
+belongs to this repository.
+
+- **Ask by pull request.** A new platform number, capability bit, message
+  type or any other number is a pull request that adds it to both
+  registry.md and registry.json, with what it's for and who uses it. An
+  issue first is fine if you'd rather ask.
+- **The spec's maintainers approve it** ([MAINTAINERS.md](MAINTAINERS.md)).
+  The number is assigned once the pull request is merged, not before.
+- **Never reused.** A number stays with what it was given to, even if that
+  project stops or the feature is retired.
+- **Wire constants never change.** A label, magic or byte layout that is
+  already on the wire stays as it is, even where it names a project
+  (registry.md, "Labels").
+- **`chupa-*` wire IDs are Chupathingy's.** They name revisions of
+  Chupathingy's own code and are listed for reference only. Another
+  implementation leaves the tag out ([ports.md](ports.md#the-advertisement))
+  or uses a prefix of its own.
+
 ## Implementation notes
 
 Paragraphs marked **Chupathingy notes** describe one implementation. Other

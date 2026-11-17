@@ -1,5 +1,21 @@
 # Changelog
 
+## 2026-11-17 (registry)
+
+- The registry belongs to this repository: numbers by pull request,
+  approved by the spec's maintainers, never reused; `chupa-*` wire IDs stay
+  Chupathingy's ([CONTRIBUTING.md](CONTRIBUTING.md#numbers)).
+- `server_badge` (16): built, keys not issued. `mcc_maps` (24): a room-wide
+  content gate plus HOST_NUMBER, with no map identity on the wire.
+- Network versions 43 and 44 say who announces them; 44 is announced through
+  the signed table (the number built into the code is 32).
+- The Dreamcast's (22) policy row in [peer.md](peer.md#platform-policy).
+- New registry sections for numbers that were only in the pages or the code:
+  platform policy, platform key flags, messages, map families, permissions,
+  device certificate flags and capabilities, report reasons, moderation
+  actions and labels.
+- The reference client has `DREF_CAP_LOBBY_READY` (26).
+
 ## 2026-11-16
 
 - The spec moved here from the `docs/delta/` folder of
