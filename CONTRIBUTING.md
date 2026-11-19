@@ -24,8 +24,8 @@ The spec belongs to everyone who builds on it. Anyone may propose a change.
   may refuse one vulnerable message, never a whole version, and says so.
 - **The legacy game protocol stays untouched.** Delta never changes what a
   machine without Delta sees.
-- **Numbers come from the registry.** Platform keys, capability bits, wire
-  IDs and ports are assigned in [registry.md](registry.md) and
+- **Numbers come from the registry.** Platform keys, capability bits,
+  message types and ports are assigned in [registry.md](registry.md) and
   [registry.json](registry.json), by pull request. Never pick a number in
   your own build and send it: ask first, and send 0 (unknown) until it's
   assigned. Numbers are never reused.
@@ -48,8 +48,9 @@ belongs to this repository.
   (registry.md, "Labels").
 - **`chupa-*` wire IDs are Chupathingy's.** They name revisions of
   Chupathingy's own code and are listed for reference only. Another
-  implementation leaves the tag out ([ports.md](ports.md#the-advertisement))
-  or uses a prefix of its own.
+  implementation leaves the tag out ([ports.md](ports.md#the-advertisement)),
+  or uses a prefix of its own once the wire rule for other implementations
+  is settled.
 
 ## Implementation notes
 

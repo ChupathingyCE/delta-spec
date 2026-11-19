@@ -18,7 +18,7 @@
       "name": "Windows",
       "class": "pc",
       "for": "Chupathingy",
-      "status": "ours"
+      "status": "in use"
     },
     {
       "number": 2,
@@ -27,7 +27,7 @@
       "name": "Mac",
       "class": "pc",
       "for": "Chupathingy",
-      "status": "ours"
+      "status": "in use"
     },
     {
       "number": 3,
@@ -36,7 +36,7 @@
       "name": "Linux",
       "class": "pc",
       "for": "Chupathingy",
-      "status": "ours"
+      "status": "in use"
     },
     {
       "number": 4,
@@ -45,7 +45,7 @@
       "name": "Android",
       "class": "handheld",
       "for": "Chupathingy",
-      "status": "ours"
+      "status": "in use"
     },
     {
       "number": 5,
@@ -54,7 +54,7 @@
       "name": "SteamOS",
       "class": "handheld",
       "for": "Chupathingy",
-      "status": "ours"
+      "status": "in use"
     },
     {
       "number": 6,
@@ -63,7 +63,7 @@
       "name": "Xbox",
       "class": "console",
       "for": "Chupathingy (warthog-xbox)",
-      "status": "ours"
+      "status": "in use"
     },
     {
       "number": 7,
@@ -72,7 +72,7 @@
       "name": "Xbox 360",
       "class": "console",
       "for": "Chupathingy (warthog-360)",
-      "status": "ours"
+      "status": "in use"
     },
     {
       "number": 8,
@@ -81,7 +81,7 @@
       "name": "Wii U",
       "class": "console",
       "for": "Chupathingy (warthog-wiiu)",
-      "status": "ours"
+      "status": "in use"
     },
     {
       "number": 9,
@@ -90,7 +90,7 @@
       "name": "Switch",
       "class": "console",
       "for": "Chupathingy (warthog-switch), port by thelinkin",
-      "status": "ours"
+      "status": "in use"
     },
     {
       "number": 10,
@@ -126,7 +126,7 @@
       "name": "FreeBSD",
       "class": "pc",
       "for": "Renkoto (port/unix)",
-      "status": "in our tree"
+      "status": "in Chupathingy's tree"
     },
     {
       "number": 14,
@@ -478,7 +478,7 @@
       },
       {
         "version": 42,
-        "by": "ports that play 42's layout; our clients play it by the host's number"
+        "by": "ports that play 42's layout; Chupathingy's clients play it by the host's number"
       },
       {
         "version": 43,
@@ -997,6 +997,50 @@
     {
       "number": 4,
       "name": "pack"
+    }
+  ],
+  "host_rules_flags": [
+    {
+      "value": 1,
+      "name": "player_names",
+      "meaning": "names above other players' heads allowed"
+    },
+    {
+      "value": 2,
+      "name": "follow_camera",
+      "meaning": "a follow camera while waiting to respawn allowed"
+    },
+    {
+      "value": 4,
+      "name": "late_join_hold",
+      "meaning": "a player who joins a game in progress waits for the next game"
+    },
+    {
+      "value": 8,
+      "name": "joins_locked",
+      "meaning": "the host takes no new machines now"
+    }
+  ],
+  "game_modes": [
+    {
+      "bit": 0,
+      "name": "swat",
+      "mode": "SWAT"
+    },
+    {
+      "bit": 1,
+      "name": "hardcore",
+      "mode": "Hardcore"
+    },
+    {
+      "bit": 2,
+      "name": "gun_game",
+      "mode": "Gun Game"
+    },
+    {
+      "bit": 3,
+      "name": "infection",
+      "mode": "Infection"
     }
   ],
   "permissions": [

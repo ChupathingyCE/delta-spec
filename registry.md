@@ -22,19 +22,19 @@ is in [peer.md](peer.md#platform-policy) and in registry.json's
 | Number | Key | Tag | Name | Class | For | Status |
 | --- | --- | --- | --- | --- | --- | --- |
 | 0 | `unknown` |  |  |  |  | a machine that doesn't say |
-| 1 | `pc_windows` | WIN | Windows | pc | Chupathingy | ours |
-| 2 | `pc_macos` | MAC | Mac | pc | Chupathingy | ours |
-| 3 | `pc_linux` | LNX | Linux | pc | Chupathingy | ours |
-| 4 | `android` | AND | Android | handheld | Chupathingy | ours |
-| 5 | `steam_deck` | STEAMOS | SteamOS | handheld | Chupathingy | ours |
-| 6 | `xbox` | XBOX | Xbox | console | Chupathingy (warthog-xbox) | ours |
-| 7 | `xbox360` | 360 | Xbox 360 | console | Chupathingy (warthog-360) | ours |
-| 8 | `wiiu` | WIIU | Wii U | console | Chupathingy (warthog-wiiu) | ours |
-| 9 | `switch` | NX | Switch | console | Chupathingy (warthog-switch), port by thelinkin | ours |
+| 1 | `pc_windows` | WIN | Windows | pc | Chupathingy | in use |
+| 2 | `pc_macos` | MAC | Mac | pc | Chupathingy | in use |
+| 3 | `pc_linux` | LNX | Linux | pc | Chupathingy | in use |
+| 4 | `android` | AND | Android | handheld | Chupathingy | in use |
+| 5 | `steam_deck` | STEAMOS | SteamOS | handheld | Chupathingy | in use |
+| 6 | `xbox` | XBOX | Xbox | console | Chupathingy (warthog-xbox) | in use |
+| 7 | `xbox360` | 360 | Xbox 360 | console | Chupathingy (warthog-360) | in use |
+| 8 | `wiiu` | WIIU | Wii U | console | Chupathingy (warthog-wiiu) | in use |
+| 9 | `switch` | NX | Switch | console | Chupathingy (warthog-switch), port by thelinkin | in use |
 | 10 | `psp` | PSP | PSP | handheld | Sheepdog01 | community port |
 | 11 | `vita` | VITA | Vita | handheld | Lord BirchWood | community port |
 | 12 | `xbox_uwp` | XBS | Xbox Series | console | ReviveMe | community port |
-| 13 | `pc_freebsd` | BSD | FreeBSD | pc | Renkoto (port/unix) | in our tree |
+| 13 | `pc_freebsd` | BSD | FreeBSD | pc | Renkoto (port/unix) | in Chupathingy's tree |
 | 14 | `ps3` | PS3 | PS3 | console | Mayo's fork | community port |
 | 15 | `ps4` | PS4 | PS4 | console | MobSlicer152 | in use |
 | 16 | `ps5` | PS5 | PS5 | console |  | reserved, no known port |
@@ -125,8 +125,8 @@ wire hosts advertised is `chupa-29a`.
 ## Network versions
 
 The legacy protocol's network version, as hosts announce it
-([versioning.md](versioning.md#the-legacy-number)). Our clients join hosts
-of 11 to 45; 11 is the newest breaking version. Every
+([versioning.md](versioning.md#the-legacy-number)). Chupathingy's clients join
+hosts of 11 to 45; 11 is the newest breaking version. Every
 version's change is in [versioning.md](versioning.md#legacy-versions).
 
 Numbers seen in the wild:
@@ -135,7 +135,7 @@ Numbers seen in the wild:
 | --- | --- |
 | 32 | older Chupathingy and console builds |
 | 41 | chupa-41a's builds (0.8.1d to 0.9.0) |
-| 42 | ports that play 42's layout; our clients play it by the host's number |
+| 42 | ports that play 42's layout; Chupathingy's clients play it by the host's number |
 | 43 | OpenCE's 43 hosts; `chupa-43a`'s hosts of MCC maps (development builds, no release) |
 | 44 | current: announced when the signed table's row for a wire lists it for hosting (with no row, a desktop build or server hosts 41 and a console 32; the number built into the code is 32). From `chupa-44a`, the number a host plays an MCC map's game at ([peer.md](peer.md), HOST_NUMBER) |
 | version with bit 15 set (0x8000) | a GOAT H1 host closed to other builds: closed, never joinable |
@@ -212,6 +212,30 @@ last. There is no MCC family: `mcc_maps` carries no map identity.
 | 2 | `halomd`: HaloMD |
 | 3 | `halo_pc`: Halo PC retail |
 | 4 | `pack`: an Xbox map pack's map |
+
+## Host rules flags
+
+HOST_RULES's flags byte ([peer.md](peer.md#host-rules)): what a host lets
+its players turn on. A machine ignores a flag it doesn't know.
+
+| Value | Name | Meaning |
+| --- | --- | --- |
+| 0x01 | `player_names` | names above other players' heads allowed |
+| 0x02 | `follow_camera` | a follow camera while waiting to respawn allowed |
+| 0x04 | `late_join_hold` | a player who joins a game in progress waits for the next game |
+| 0x08 | `joins_locked` | the host takes no new machines now |
+
+## Game modes
+
+The game modes field of HELLO and WELCOME ([peer.md](peer.md#game-modes),
+`game_modes`): the modes a machine plays, one bit each.
+
+| Bit | Value | Mode |
+| --- | --- | --- |
+| 0 | 0x01 | SWAT |
+| 1 | 0x02 | Hardcore |
+| 2 | 0x04 | Gun Game |
+| 3 | 0x08 | Infection |
 
 ## Permissions
 
