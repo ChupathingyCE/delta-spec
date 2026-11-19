@@ -7,6 +7,11 @@ original game never had. These pages are its specification. They are given
 to the wider community, and anyone may build a client, server, port or tool
 that speaks it.
 
+Delta is the name of the shared spec, not of any one program or network.
+Chupathingy is one implementation of it, and its site runs one network
+among others ([federation.md](federation.md)). The name is open to change
+if the projects that build on it agree on another.
+
 This repository holds the spec only. It is separate from any
 implementation.
 
@@ -36,18 +41,18 @@ project, and nothing is secret but signing keys.
 
 | Implementation | What it is | Status |
 | --- | --- | --- |
-| [Chupathingy](https://github.com/ChupathingyCE/chupathingyce) | the game (PC, Mac, Linux, Android, consoles) and its dedicated server | implements Peer, List, Stats, Control and Link |
-| delta-server | a reference network: site, list, stats and accounts anyone can run | planned |
+| [Chupathingy](https://github.com/ChupathingyCE/chupathingyce) | the game (PC, Mac, Linux, Android, consoles), its dedicated server and its site | implements Peer, List, Stats, Control, Link and Social |
+| [delta-server](https://github.com/ChupathingyCE/delta-server) | a reference node anyone can run: the game list, device identity, presence, friends, invites and parties (MIT) | draft |
 | yours | any port, fork or tool | welcome: see [ports.md](ports.md) and [CONTRIBUTING.md](CONTRIBUTING.md) |
 
 Chupathingy's game repository checks itself against this spec: a test
 there fails when [registry.json](registry.json) and the game's code
 disagree, and the reference client's golden packets are checked against
 the hex examples in [peer.md](peer.md). How Chupathingy implements the spec
-(settings, menus, files) is on its own side:
+(settings, menus, files, where its code is) is on its own side:
 [delta-implementation.md](https://github.com/ChupathingyCE/chupathingyce/blob/main/docs/delta-implementation.md).
-Paragraphs marked **Chupathingy notes** in these pages describe that
-implementation and are not part of the spec.
+Notes about one implementation stay in that implementation's own
+documentation, not in these pages.
 
 ## Status
 
@@ -154,6 +159,7 @@ of a game.
 | [MAINTAINERS.md](MAINTAINERS.md) | who keeps the spec |
 | [CHANGELOG.md](CHANGELOG.md) | what changed, by date |
 | [Chupathingy](https://github.com/ChupathingyCE/chupathingyce) | the game, the first implementation |
+| [delta-server](https://github.com/ChupathingyCE/delta-server) | a reference node (draft, MIT) |
 | [Reference client](reference/) | a small C client with golden packets and a conformance script (MIT) |
 | [Playing online](https://github.com/ChupathingyCE/chupathingyce/blob/main/docs/online.md) | for players: how to get online with Chupathingy |
 

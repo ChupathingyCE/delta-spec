@@ -133,8 +133,6 @@ network qualified where it must tell two apart (`[BGB] church:example.org`).
 Members from other networks would need cross-network invites (a later
 step).
 
-> **Implementation note (Chupathingy's network):** making and editing a
-> clan, ranks and the emblem are on the site's own pages
-> (`/v1/session/clan/*`), which are the site's, not the spec's. "Ranks"
-> here are clan roles, not player progression ranks (see
-> [comparison.md](comparison.md)).
+"Ranks" here are clan roles, not player progression ranks (see
+[comparison.md](comparison.md)). How a network lets players make and edit
+a clan, its ranks and its emblem is that network's own.
