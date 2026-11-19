@@ -241,6 +241,7 @@ its players turn on. A machine ignores a flag it doesn't know.
 | 0x02 | `follow_camera` | a follow camera while waiting to respawn allowed |
 | 0x04 | `late_join_hold` | a player who joins a game in progress waits for the next game |
 | 0x08 | `joins_locked` | the host takes no new machines now |
+| 0x10 | `air_turn_aim` | a shot fired while turned around in mid-air goes where the player aims |
 
 ## Game modes
 
