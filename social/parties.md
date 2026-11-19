@@ -177,11 +177,6 @@ Members from other networks would show as `handle:domain`; invites and
 codes across networks are a later step. The tag stays network-free: a
 host never needs to know which network a party belongs to.
 
-> **Implementation note (Chupathingy's network):** the share link is
-> `https://stats.chupathingy.org/party/CODE`. Another network uses its own
-> site; the `halo://party/CODE` link is the same everywhere, but a code is
-> only meaningful on the network that issued it (see Proposals).
-
 ## Proposals
 
 - A network in party links (`halo://party/CODE@domain`), so a code can be

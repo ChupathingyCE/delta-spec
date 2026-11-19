@@ -179,10 +179,3 @@ Every `handle` may be qualified:
 player on another network would go network to network, as the
 federation proposal's later step says; blocks and privacy stay with each
 player's own network. Not built.
-
-> **Implementation note (Chupathingy's network):** the site's own pages
-> use the same state through a signed-in session (`GET
-> /v1/social/state`, `/v1/session/friends/*`); those are the site's, not
-> the spec's. The site also requires the game's requests to carry a
-> `User-Agent` starting with `chupathingyce`; other clients should not
-> rely on that, and the spec does not require it.

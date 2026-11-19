@@ -113,7 +113,3 @@ Not built.
   asked, a registry key, shown as the friend's logo.
 - Presence for games that aren't listed, carrying only "in a game" and a
   game type.
-
-> **Implementation note (Chupathingy's network):** the reference client
-> also feeds the same status to Discord's rich presence on the player's
-> own machine. That is local and outside the spec.

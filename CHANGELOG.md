@@ -12,6 +12,12 @@
   ([CONTRIBUTING.md](CONTRIBUTING.md)).
 - Removed a stale note in [social/platform.md](social/platform.md): the
   site lists `dreamcast` (22) now.
+- The social pages' implementation notes (chat, clans, friends, invites,
+  parties, presence, voice) moved out too. The game's went to Chupathingy's
+  `docs/delta-implementation.md`; the site's went to the site's own docs.
+  Two sentences that are about the spec stay as plain text: the legacy chat
+  entries' source ([social/chat.md](social/chat.md)) and what "ranks" means
+  ([social/clans.md](social/clans.md)).
 
 ## 2026-11-16
 

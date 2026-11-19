@@ -77,7 +77,3 @@ to the network. The party tag is never echoed.
 
 A build without voice never agrees to `voice` and is sent no frames; a
 host without it relays nothing. Players without Delta have no Delta voice.
-
-> **Implementation note (Chupathingy):** voice is on Windows, macOS, Linux
-> and Android; consoles are never sent voice for now. A bridge to another
-> project's voice is planned as a clean-room spec, not built.
