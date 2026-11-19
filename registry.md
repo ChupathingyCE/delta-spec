@@ -3,8 +3,10 @@
 Every number Delta assigns, written down in one place. The same data is in
 [registry.json](registry.json), which other projects can read and test
 against. Chupathingy's game repository has a test
-(`tools/test_delta_registry.py`) that fails if registry.json and its code
-disagree.
+(`tools/test_delta_registry.py`) that fails if its code disagrees with the
+game's own copy of this registry (`docs/delta/registry.json` and
+`registry.md` there), which is kept in step with this one. The test doesn't
+read this repository's files yet.
 
 Numbers are assigned by pull request to this repository and approved by the
 spec's maintainers ([CONTRIBUTING.md](CONTRIBUTING.md#numbers)). Numbers
@@ -121,6 +123,21 @@ wire hosts advertised is `chupa-29a`.
 | `chupa-43a` | development builds before 0.9.1 (no release) | `chupa-28a` | 43 |
 | `chupa-44a` | 0.9.1, 0.9.1a | `chupa-28a` | 44 |
 | `chupa-44b` | 0.9.2 (in development) | `chupa-28a` | 44 |
+
+## Platform floors
+
+Each platform's own floor in the signed legacy table (`platform_floors`,
+[versioning.md](versioning.md#platform-floors)): the oldest network version a
+Delta machine of that platform may say in its HELLO and still play with a
+host that reads the section. A table carries at most 64 rows. A platform
+without a row has no floor at run time; Chupathingy's consoles then keep the
+build-time console floor, `chupa-32a`. A row is added here when a table that
+carries it is signed.
+
+| Platform | Floor | Since table | Why |
+| --- | --- | --- | --- |
+
+None yet.
 
 ## Network versions
 

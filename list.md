@@ -33,12 +33,15 @@ one it can't read rather than refusing the announcement, so older builds
 (which send none) and newer ones (a longer platform key, a platform it
 doesn't know) are listed as ever.
 
-From them the site lists each game's `platform`, `hosting` (`official`: our
-`[C]` servers, by their hosts; `dedicated`; `player`), `protocol` (`delta`,
-`opence`), `family` (`xbox`, `ce`, `pc`, `md`, by the map's suffix) and
-`machines`; OpenCE's public games (the brokers) are `opence` and nothing
-more. The game's browser reads them from `/v1/games.txt?fields=28&coop=1` (field
-13 the region; 14 to 17: platform, hosting, protocol, machines; 18 an
+From them the site lists each game's `platform`, `hosting` (`official`:
+Chupathingy's `[C]` servers, by their hosts; `dedicated`; `player`),
+`protocol` (`delta`, `opence`), `family` (by the map's name: `xbox` an Xbox
+map; `ce` Custom Edition, `<file>@ce`; `pc` Halo PC retail, `<file>@pc`;
+`md` HaloMD, `<file>@md`; `pack` an Xbox map pack's map, `<file>@<pack>`;
+`mcc` an MCC map, `mcc_maps\<package>\<level>`) and `machines`; OpenCE's
+public games (the brokers) are `opence` and nothing more. The game's
+browser reads them from `/v1/games.txt?fields=28&coop=1` (field 13 the
+region; 14 to 17: platform, hosting, protocol, machines; 18 an
 OpenCE game's gametype; 19 the announced capabilities; 20 to 22 an Xbox map
 pack's map name, pack and tag; 23 the playlist; 24 `opence_server` for an
 OpenCE dedicated server's game; 25 `1` when the host's joins are locked; 26
