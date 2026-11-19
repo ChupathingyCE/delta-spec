@@ -18,6 +18,20 @@
   Two sentences that are about the spec stay as plain text: the legacy chat
   entries' source ([social/chat.md](social/chat.md)) and what "ranks" means
   ([social/clans.md](social/clans.md)).
+- The registry belongs to this repository: numbers by pull request,
+  approved by the spec's maintainers, never reused; `chupa-*` wire IDs stay
+  Chupathingy's ([CONTRIBUTING.md](CONTRIBUTING.md#numbers)).
+- `server_badge` (16): built, keys not issued. `mcc_maps` (24): a room-wide
+  content gate plus HOST_NUMBER, with no map identity on the wire.
+- Network versions 43 and 44 say who announces them; 44 is announced through
+  the signed table (Chupathingy's built-in number is 32).
+- The Dreamcast's (22) policy row in [peer.md](peer.md#platform-policy).
+- New registry sections for numbers that were only in the pages or the code:
+  platform policy, platform key flags, messages, map families, host rules
+  flags, game modes, permissions, device certificate flags and
+  capabilities, report reasons, moderation actions and labels. Platform
+  statuses say "in use" rather than "ours".
+- The reference client has `DREF_CAP_LOBBY_READY` (26).
 
 ## 2026-11-16
 
