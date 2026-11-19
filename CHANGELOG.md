@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-11-19
+
+- Platform floors, which landed in Chupathingy after the spec moved here: the
+  signed table's `platform_floors` ([versioning.md](versioning.md#platform-floors)),
+  and a Platform floors section in [registry.md](registry.md#platform-floors)
+  and registry.json (at most 64 rows, none signed yet).
+- The game list's `family` values include `pack` (an Xbox map pack's map)
+  and `mcc` (an MCC map) ([list.md](list.md)).
+- The registry says which copy Chupathingy's `tools/test_delta_registry.py`
+  checks: the game's own, kept in step with this one, not this
+  repository's yet.
+
 ## 2026-11-17
 
 - Delta is the name of the shared spec; Chupathingy is one implementation

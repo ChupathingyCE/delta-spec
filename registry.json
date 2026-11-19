@@ -1,6 +1,6 @@
 {
   "registry": 1,
-  "description": "Every number Delta assigns. registry.md explains each one. Numbers are assigned by pull request to this repository and never reused (CONTRIBUTING.md). Chupathingy's game repository checks its code against this file (tools/test_delta_registry.py there).",
+  "description": "Every number Delta assigns. registry.md explains each one. Numbers are assigned by pull request to this repository and never reused (CONTRIBUTING.md). Chupathingy's game repository checks its code against its own copy of this registry (docs/delta/registry.json there, kept in step with this file; tools/test_delta_registry.py there), not yet against this file.",
   "platforms": [
     {
       "number": 0,
@@ -460,6 +460,12 @@
         "builds": "0.9.2 (in development)"
       }
     ]
+  },
+  "platform_floors": {
+    "section": "platform_floors",
+    "rows_maximum": 64,
+    "consoles_without_a_row": "chupa-32a",
+    "rows": []
   },
   "network_versions": {
     "joined_by_our_clients": [
