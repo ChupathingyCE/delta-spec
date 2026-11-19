@@ -1025,6 +1025,11 @@
       "value": 8,
       "name": "joins_locked",
       "meaning": "the host takes no new machines now"
+    },
+    {
+      "value": 16,
+      "name": "air_turn_aim",
+      "meaning": "a shot fired while turned around in mid-air goes where the player aims"
     }
   ],
   "game_modes": [

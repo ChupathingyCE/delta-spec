@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- HOST_RULES flag 0x10, `air_turn_aim`: a shot fired while turned around in
+  mid-air goes where the player aims (the "180 glitch" fixed), off by
+  default ([peer.md](peer.md#host-rules), [registry.md](registry.md#host-rules-flags)).
+
 ## 2026-11-19
 
 - Platform floors, which landed in Chupathingy after the spec moved here: the
