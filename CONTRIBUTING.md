@@ -53,9 +53,11 @@ belongs to this repository.
 
 ## Implementation notes
 
-Paragraphs marked **Chupathingy notes** describe one implementation. Other
-implementations are welcome to add notes of their own the same way. Keep
-them out of the normative text.
+The spec pages describe the formats and behavior every implementation
+shares. How one implementation does it (its files, settings, menus, tests)
+belongs in that implementation's own documentation, which these pages may
+link to. Chupathingy's is
+[delta-implementation.md](https://github.com/ChupathingyCE/chupathingyce/blob/main/docs/delta-implementation.md).
 
 ## License
 

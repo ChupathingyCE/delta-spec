@@ -3,9 +3,9 @@
 Delta Social is the social part of the spec: friends, presence, invites, parties, chat,
 voice, clans, platform icons and moderation. It describes formats and
 behavior, not any one program. Chupathingy's game and site are the
-reference implementation and the source of every number here; where
-something is specific to Chupathingy's own network (its site's address,
-its brokers), the page says so in an **implementation note**.
+reference implementation and the source of every number here. What is
+specific to one network (its site's address, its brokers) is in that
+implementation's own documentation, not in these pages.
 
 **Status: draft.** These pages describe what Chupathingy's network does
 today; anything marked proposed is not built yet.

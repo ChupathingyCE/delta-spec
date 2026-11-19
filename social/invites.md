@@ -150,11 +150,6 @@ publish ([link.md](../link.md#the-doorbell)). Another network may carry
 the same ring another way; the ring's meaning and the client's polling
 rules stay the same.
 
-> **Implementation note (Chupathingy's network):** the doorbell rides the
-> MQTT connections internet play's signalling already keeps to
-> Chupathingy's own brokers; no new connection is opened. The party page
-> is on the stats site. Both are the network's own choices.
-
 ## Privacy rules
 
 - A friend's game is named by its listing, never by its invite or

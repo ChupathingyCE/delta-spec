@@ -3,13 +3,14 @@
 **Status: proposal.** Nothing on this page is built yet. It describes how
 any project can run its own network on the open network spec (the formats
 on these pages), with its own accounts and servers, and still play and
-verify names with every other network. Delta is Chupathingy's
-implementation and network: one network among others, not the spec itself. Comments
-are welcome on the issue tracker.
+verify names with every other network. Delta is the name of the shared
+spec. Chupathingy is one implementation of it, and the network its site
+runs is one network among others. Comments are welcome on the issue
+tracker.
 
 ## The idea
 
-Today there is one network, Delta: Chupathingy's site issues the
+Today there is one network, Chupathingy's: its site issues the
 certificates that prove a player's name ([link.md](link.md#device-identity)). That works, but
 it means every port, fork or community that wants verified names, friends or
 profiles has to rely on one project's servers.
@@ -124,7 +125,7 @@ A port or fork that wants its own accounts and verified names:
    spec, as `handle:yourdomain`.
 
 Today, before federation exists, a port can register an app and sign its
-players in with Delta, Chupathingy's network ([clients.md](clients.md)).
+players in with Chupathingy's network ([clients.md](clients.md)).
 
 ## Order of work
 

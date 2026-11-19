@@ -124,9 +124,7 @@ gets it, nor does anyone while the host has no Delta.
 | budget | 1 a second, 3 at once; a repeat within 10 s refused |
 | lines a client takes | 10 a second |
 
-## Implementation notes
+## The legacy chat entries
 
-> **Chupathingy:** the host's filter uses the network's blocked names
-> list, built in, plus a player's own word file on their client. The legacy
-> chat entries' format is the one another project published under CC0 on
-> 2026-10-18; this spec describes it only so clients can interoperate.
+The legacy chat entries' format is the one another project published under
+CC0 on 2026-10-18; this spec describes it only so clients can interoperate.
