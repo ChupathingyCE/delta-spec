@@ -5,6 +5,10 @@
 - HOST_RULES flag 0x10, `air_turn_aim`: a shot fired while turned around in
   mid-air goes where the player aims (the "180 glitch" fixed), off by
   default ([peer.md](peer.md#host-rules), [registry.md](registry.md#host-rules-flags)).
+- Platform numbers are per platform, not per project: a fork or another
+  project uses its platform's number and tells itself apart by its build
+  name and wire. A web build gets a number like any other platform
+  ([registry.md](registry.md#platforms), [ports.md](ports.md#the-short-version)).
 
 ## 2026-11-19
 

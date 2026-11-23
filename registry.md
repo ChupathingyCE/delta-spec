@@ -21,6 +21,13 @@ the game list; the tag is the short label on a game list row. Its policy row
 is in [peer.md](peer.md#platform-policy) and in registry.json's
 `platform_policy`.
 
+A number is for a platform, not for a project. Every build on Windows,
+whoever made it, sends Windows' number (1); a fork or another project
+tells itself apart by its build name (HELLO's build text, the game list's
+`build`) and, where it has one, its wire, never by a number of its own. A new number is for a
+platform that has none yet. A web build is a platform like any other: it
+gets its number by pull request when someone asks for it.
+
 | Number | Key | Tag | Name | Class | For | Status |
 | --- | --- | --- | --- | --- | --- | --- |
 | 0 | `unknown` |  |  |  |  | a machine that doesn't say |
@@ -49,7 +56,8 @@ is in [peer.md](peer.md#platform-policy) and in registry.json's
 
 ### How to ask for a number
 
-Open a pull request on
+If your platform is in the table, use its number. If it isn't, open a
+pull request on
 [ChupathingyCE/delta-spec](https://github.com/ChupathingyCE/delta-spec)
 that adds the next number to this page and to registry.json, with its policy
 row: the platform, your port's name and link, roughly how much memory the
