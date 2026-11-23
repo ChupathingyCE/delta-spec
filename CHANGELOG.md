@@ -5,6 +5,10 @@
 - HOST_RULES flag 0x10, `air_turn_aim`: a shot fired while turned around in
   mid-air goes where the player aims (the "180 glitch" fixed), off by
   default ([peer.md](peer.md#host-rules), [registry.md](registry.md#host-rules-flags)).
+- [forge.md](forge.md): Forge layout files (`.hmv`, `HFRG`, versions 1 to
+  7), byte by byte, with every check a reader makes, so any client can
+  read and write them. Network Forge is noted; its wire format comes
+  later.
 
 ## 2026-11-19
 
