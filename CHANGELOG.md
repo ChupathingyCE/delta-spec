@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Federation, proposal: a certificate's network is the one whose root key
+  signed its issuer certificate, so no certificate changes and today's read
+  as `chupathingy.org`; roots.json, the signed list of networks, local
+  additions and removals, the offline check and what shows
+  ([link.md](link.md#networks), [federation.md](federation.md)), with test
+  vectors in [reference/federation_vectors.json](reference/federation_vectors.json).
 - HOST_RULES flag 0x10, `air_turn_aim`: a shot fired while turned around in
   mid-air goes where the player aims (the "180 glitch" fixed), off by
   default ([peer.md](peer.md#host-rules), [registry.md](registry.md#host-rules-flags)).

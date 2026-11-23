@@ -526,6 +526,193 @@ signout signature   f579b26e3db2c34573a7a4e9842d85ef6646513dbf73706aeae41c825a44
                     1dddea806dbe0ecfd7a39b803e3e520190750980b2c4ff3689f2c19c1a66e80b
 ```
 
+## Networks
+
+**Status: proposal** ([federation.md](federation.md)). Each network has its
+own root keys, issuer and device certificates, in exactly the formats of
+"Device identity" above. This section adds what a game needs to tell
+networks apart and check any network's names offline: the root keys each
+network publishes, the signed list of networks a game trusts, and the
+check itself. Nothing in CISS, CDEV, CREV, ID_PROOF or ID_CARD changes, and
+a build that doesn't read this section checks certificates as before.
+
+**Which network a certificate belongs to.** The network whose root key
+signed its issuer certificate (CISS). A device certificate names its issuer
+by key ID, and the issuer certificate travels beside it (in a certificate
+answer, ID_PROOF and ID_CARD), so a game finds the network by checking the
+CISS's signature against the root keys of the networks it trusts. No root
+key belongs to two networks (below), so at most one matches. The
+identity root keys every Chupathingy build has (`9c1c4454...468e` and
+`a3124502...d29f`, "Keys") are the network `chupathingy.org`'s, so every
+certificate issued so far reads as `chupathingy.org` with no change.
+
+**A network's domain** is a lowercase ASCII host name: 4 to 253
+characters, two labels or more, each label 1 to 63 of `a-z 0-9 -` that
+doesn't start or end with `-` and doesn't start with `xn--`, and a last
+label of 2 to 63 letters. So an address is never a domain, and neither is
+an internationalized name, which could be made to look like another
+network's (that may be allowed later, with a look-alike rule).
+
+**roots.json.** A network publishes its root keys at
+`https://<domain>/.well-known/open-network/roots.json`, served over HTTPS
+from the domain itself, which is what shows the network controls it. At
+most 8192 bytes:
+
+```json
+{
+  "open_network_roots": 1,
+  "domain": "example.org",
+  "roots": [
+    {"key": "64 hex", "use": "primary", "until": 0, "proof": "128 hex"},
+    {"key": "64 hex", "use": "recovery", "until": 1893456000, "proof": "128 hex"}
+  ],
+  "revoked": "https://example.org/v1/identity/revoked"
+}
+```
+
+- **`open_network_roots`**: the format, 1. Another value is refused.
+- **`domain`**: the network's domain. It must be the domain the file was
+  fetched from.
+- **`roots`**: 1 to 4 root keys, none twice. `key` is the Ed25519 public
+  key, 64 lowercase hex digits, never of small order. `until` (optional, 0
+  for none) is the last Unix second the key is trusted: a key past it no
+  longer vouches for any issuer certificate. `use` (optional) is a word for
+  people (`primary`, `recovery`, `next`); nothing reads it.
+- **`proof`**: the key's own signature, 128 lowercase hex digits, over
+  `"open network roots v1\n"`, the domain's length (1 byte), the domain,
+  the key (32) and `until` (4, little-endian). It shows that whoever
+  publishes the file holds each key, for this domain.
+- **`revoked`** (optional): an `https://` address of at most 256 printable
+  characters where the network's revocation list (CREV) answers, as
+  `/v1/identity/revoked` does. Nothing fetches it yet (see "What isn't
+  checked yet").
+- Unknown members are skipped.
+
+**Rotating root keys.** A network adds its new key to roots.json beside the
+old ones (up to 4), gives the old one an `until` past the last issuer
+certificate it signed, and asks the list's publisher for a new list. Its
+issuer certificates are signed by the new key from then on.
+
+**The signed list of networks.** One JSON document, signed by its
+publisher's key (each game trusts the publishers it was built with; the key
+is the publisher's, and a primary and a recovery key work as for the signed
+table, [versioning.md](versioning.md#the-key)). At most 16384 bytes:
+
+```json
+{
+  "open_networks": 1,
+  "serial": 1,
+  "issued": 1790000000,
+  "networks": {
+    "chupathingy.org": {"roots": [{"key": "64 hex", "until": 0}, {"key": "64 hex", "until": 0}]},
+    "example.org": {"roots": [{"key": "64 hex", "until": 1893456000}]}
+  }
+}
+```
+
+- **`open_networks`**: the format, 1.
+- **`serial`**: 1 to 4294967294, higher is newer; its top byte is its epoch,
+  and each publisher key signs serials up to its own last epoch, as the
+  signed table's ([versioning.md](versioning.md#epochs)). An older or
+  equal serial than the one a game has is ignored.
+- **`issued`** (optional): Unix seconds, for people.
+- **`networks`**: 0 to 64 networks, by domain. Each has 1 to 4 root keys, as
+  its roots.json gives them (`key`, and `until`, 0 or left out for none).
+  No root key may appear twice in the whole list.
+- Unknown members are skipped.
+
+The **signature** is Ed25519 over `"open network list v1\n"` and then the
+document's exact bytes, written as 128 lowercase hex digits. As files, the
+document and its signature sit side by side (`networks.json`,
+`networks.json.sig`, the signature and a line feed); as one file or blob,
+the signature's 128 hex digits, a line feed, then the document. A
+network's Delta List serves the two at `/v1/delta/networks` and
+`/v1/delta/networks.sig`, as they are. A game fetches them from its own
+network's site, at start and every few hours, and keeps the newest it
+took; it ships with the list as it was at its release.
+
+To be listed, a network publishes its roots.json and asks the list's
+publisher, who fetches it from the network's address, checks every proof
+and puts the keys in the next list. Being listed means only that the
+network's names are checked; it gives no one access to anything.
+
+**Reading the list and roots.json** is strict, and anything wrong refuses
+the whole file:
+
+- The size first (8192 bytes for roots.json, 16384 for the list's
+  document), then the list's signature, and only then the JSON.
+- JSON (RFC 8259) in UTF-8 with no member twice in an object, nothing
+  nested more than 8 deep (the document itself is 1), whole numbers only
+  (no fraction, exponent, `NaN` or `Infinity`), each in its field's range,
+  `true` and `false` never taken as numbers, and nothing after the
+  document but white space.
+- Hex in lowercase only. A domain that breaks the rules above, a root key
+  of small order, a key twice, a roots.json whose `domain` isn't the
+  address it came from, or a proof that doesn't check, refuses the file.
+
+**The networks a game trusts** are, in this order:
+
+1. **Its home network**: the network its own copy signs in to, with the
+   root keys it was built with. A list or a setting never changes it: a
+   list's entry or a local addition for the home domain is skipped, and
+   the home network can't be removed.
+2. **The signed list's** networks.
+3. **Local additions**: a setting holding up to 16 networks, each a domain
+   and 1 to 4 root keys (64 hex digits each), for private or test
+   networks. A domain already trusted is skipped.
+4. **Local removals**: a setting of domains the game doesn't trust even
+   when the list has them (never the home network).
+
+A network (from the list or a local addition) with a root key another
+trusted network already has is left out, and the log says so.
+
+**How a game checks a name**, offline (no network is asked anything):
+
+1. Read the CISS ("Device identity"). Find the trusted network one of whose
+   root keys, in date (now at most `until`, when set), signed it. None: the
+   name isn't checked, and the player shows by their game name.
+2. Check the CISS and the CDEV exactly as "Device identity" and Delta
+   Peer's "Verified names" say (dates, grace, `play`, the proof's
+   signature), with that network's root keys alone. The revocation list
+   applied is that network's own, where the game has it.
+3. The name is `handle:domain`: the CDEV's handle and the network's domain.
+   The account is the pair (domain, the CDEV's 16-byte account): the same
+   16 bytes from two networks are two different accounts, so "one identity,
+   one player" and every lookup by account goes by the pair.
+
+**What shows** ([federation.md](federation.md#names)): a verified player of
+the viewer's own home network shows as today (the handle in its owner's
+capitals); a verified player of another network shows as
+`Name:domain`, the domain always in lowercase, so a familiar name never
+hides where it came from. The capitals come from the proof's name, as
+"Verified names" allows before a site's card arrives: a game asks only its
+own network's site about its own network's accounts, never about another
+network's. Clan tags and badges show only for the home network's players
+for now.
+
+**What isn't checked yet**, so a reviewer knows:
+
+- **Other networks' revocation lists.** A game applies its home network's
+  CREV as today. A revoked device of another network stays verified until
+  its certificate expires (7 days, 14 on consoles). roots.json's `revoked`
+  is there for a later version that fetches them.
+- **Roles and bans.** A role or a ban comes only from a bound proof of the
+  home network's players, as today. Another network's players show by
+  name and get no role, and a server's ban lists match them by game name,
+  player key and hardware as before, until ban entries carry a domain.
+- **Look-alike domains.** A trusted network could pick a domain that looks
+  like another's. The list's publisher refuses those; local additions are
+  the player's own choice.
+
+**Test vectors** (TEST keys only, each seed SHA-256 of its text) are in
+[reference/federation_vectors.json](reference/federation_vectors.json): two
+networks, `chupathingy.org` (using this page's test root, CISS and CDEV
+above) and `example.org`, each one's roots.json, a CISS and CDEV for
+`milenko` of `example.org`, a signed list of both under a test publisher
+key, the names each pair checks as at a fixed time, and names that parse
+and don't. delta-server's `node/federation.py` (MIT) reads and writes all
+of it and checks the vectors in its tests.
+
 ## The doorbell
 
 The Delta Guide asks the site for its friends every 20 seconds in the menus and

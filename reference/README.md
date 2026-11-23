@@ -20,6 +20,7 @@ python3 conformance.py --help
 | `delta_ref.h`, `delta_ref.c` | the client: no allocation, no threads, no OS calls but your send function |
 | `delta_ref_test.c`, `golden.h` | its tests, against packets our own code wrote |
 | `conformance.py` | checks a port's packets, or stands in for a host on 127.0.0.1 |
+| `federation_vectors.json` | test vectors for federation ([link.md](../link.md#networks)): two networks' roots.json, certificates and a signed list of networks, TEST keys only. delta-server's `node/federation.py` (MIT) reads and checks them |
 | `loopback_host.sh` | our dedicated server on 127.0.0.1 alone, to join from your port |
 | (game side) | `tools/delta_ref_capture/` in the game's repository makes `golden.h` from the game's own code and tests this client against its real host |
 
