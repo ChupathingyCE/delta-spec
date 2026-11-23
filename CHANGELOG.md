@@ -5,6 +5,11 @@
 - HOST_RULES flag 0x10, `air_turn_aim`: a shot fired while turned around in
   mid-air goes where the player aims (the "180 glitch" fixed), off by
   default ([peer.md](peer.md#host-rules), [registry.md](registry.md#host-rules-flags)).
+- [list.md](list.md): hosts publish to the brokers and announce to the
+  site, so the brokers alone show every public game and the site's list
+  adds the extras. The whole announcement form, the withdrawal, the game
+  list's first twelve fields, and how another client announces: its own
+  `build` and `platform_key`, on change plus a 20-second keep-alive.
 
 ## 2026-11-19
 
