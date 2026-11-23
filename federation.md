@@ -82,7 +82,8 @@ which network a certificate belongs to. The formats are in
 - **Every game has a list of networks**: each one's domain and root keys.
   The list is a signed document, like the signed table of network versions
   ([versioning.md](versioning.md)), so it can be updated without a new
-  release. A game gets it from its own network's site and ships with the
+  release. It has its own signing keys (a primary and a recovery key),
+  never the table's. A game gets it from its own network's site and ships with the
   copy it had at release.
 - A network asks to be listed by publishing its roots.json and asking the
   list's publisher. Listing means "this network's names are checked",
@@ -95,9 +96,9 @@ which network a certificate belongs to. The formats are in
 - Short-lived certificates mean no network has to run an always-on check
   for others: a removed device simply can't renew. Each network publishes
   its own revocation list (CREV) for the rest of a certificate's life.
-  Reading other networks' lists is a later step; until then a revoked
-  device of another network shows as verified until its certificate
-  expires.
+  Other networks' lists aren't checked in this version: the 7-day device
+  certificate is the limit, so a revoked device of another network shows
+  as verified until its certificate expires. Checking them is later.
 
 ## What each network runs
 

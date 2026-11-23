@@ -546,12 +546,13 @@ identity root keys every Chupathingy build has (`9c1c4454...468e` and
 `a3124502...d29f`, "Keys") are the network `chupathingy.org`'s, so every
 certificate issued so far reads as `chupathingy.org` with no change.
 
-**A network's domain** is a lowercase ASCII host name: 4 to 253
-characters, two labels or more, each label 1 to 63 of `a-z 0-9 -` that
-doesn't start or end with `-` and doesn't start with `xn--`, and a last
-label of 2 to 63 letters. So an address is never a domain, and neither is
-an internationalized name, which could be made to look like another
-network's (that may be allowed later, with a look-alike rule).
+**A network's domain** is a lowercase ASCII host name, and nothing but
+`a-z`, `0-9`, `-` and `.`: 4 to 253 characters, two labels or more, each
+label 1 to 63 of `a-z 0-9 -` that doesn't start or end with `-` and
+doesn't start with `xn--`, and a last label of 2 to 63 letters. So an
+address is never a domain, and neither is an internationalized name,
+written in Unicode or as punycode (`xn--`), which could be made to look
+like another network's.
 
 **roots.json.** A network publishes its root keys at
 `https://<domain>/.well-known/open-network/roots.json`, served over HTTPS
@@ -594,9 +595,11 @@ certificate it signed, and asks the list's publisher for a new list. Its
 issuer certificates are signed by the new key from then on.
 
 **The signed list of networks.** One JSON document, signed by its
-publisher's key (each game trusts the publishers it was built with; the key
-is the publisher's, and a primary and a recovery key work as for the signed
-table, [versioning.md](versioning.md#the-key)). At most 16384 bytes:
+publisher's **list key set**: a primary and a recovery key of its own, used
+for nothing else, and never the signed table's keys
+([versioning.md](versioning.md#the-key)). Each game trusts the list keys it
+was built with; the recovery key works as the table's does (epochs,
+below). At most 16384 bytes:
 
 ```json
 {
@@ -692,10 +695,12 @@ for now.
 
 **What isn't checked yet**, so a reviewer knows:
 
-- **Other networks' revocation lists.** A game applies its home network's
-  CREV as today. A revoked device of another network stays verified until
-  its certificate expires (7 days, 14 on consoles). roots.json's `revoked`
-  is there for a later version that fetches them.
+- **Other networks' revocation lists.** Not checked in this version. A
+  game applies its home network's CREV as today; for every other network,
+  the device certificate's short life is the limit: a revoked device of
+  another network stays verified until its certificate expires (7 days,
+  14 on consoles). Checking other networks' lists is later; roots.json's
+  `revoked` is there for it.
 - **Roles and bans.** A role or a ban comes only from a bound proof of the
   home network's players, as today. Another network's players show by
   name and get no role, and a server's ban lists match them by game name,
