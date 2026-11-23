@@ -114,7 +114,7 @@ plus or minus pi (a reader allows 0.0001 past it).
 | --- | --- | --- | --- |
 | 0 | an object: a vehicle, weapon, equipment, scenery, machine, control, light fixture, biped or AI character | any group above | 1 |
 | 1 | a squad (nothing writes it) | `actv` | 1 |
-| 2 | a player spawn point | none | 4 |
+| 2 | a player spawn point | none | 4 (written); read in any version ([Checking a file](#checking-a-file)) |
 | 3 | a weapon spawn (nothing writes it) | `weap` or `eqip` | 1 |
 | 4 | a vehicle spawn (nothing writes it) | `vehi` | 1 |
 | 5 | a game type object: a CTF flag's spot, a hill point, an oddball spawn, a race checkpoint | none | 6 |
@@ -201,9 +201,9 @@ A reader checks, in this order, and refuses the file at the first failure:
 5. **Packs, paths, records and meta,** each within the file, as above.
    Every record's floats are finite and its reserved bytes zero.
 6. **Each record,** for the file's version: a known kind (0 to 5, 7 or
-   8), of a version at or below the file's. Kinds 5, 7 and 8 have their
-   own rules (further below) in place of the rest of this list. For kinds
-   0 to 4:
+   8); a game type object (5) only from version 6, and a teleporter (7,
+   8) only from version 5. Kinds 5, 7 and 8 have their own rules (further
+   below) in place of the rest of this list. For kinds 0 to 4:
    - a kind with an object (0, 1, 3, 4): its path index below the path
      count, and the path's group one the kind takes; any other kind: path
      index 0xFFFF;
@@ -220,9 +220,13 @@ A reader checks, in this order, and refuses the file at the first failure:
    - positions strictly between -5000 and 5000; angles within plus or
      minus pi.
 
-   A **player spawn point** (2) also has team -1 (any), 0 (red) or 1
-   (blue); game types within 0x3F (in place of 0x1F); no flag but initial
-   spawn; respawn, count, variant and AI team 0.
+   A **player spawn point** (2) in version 4 or later also has team -1
+   (any), 0 (red) or 1 (blue); game types within 0x3F (in place of 0x1F);
+   no flag but initial spawn; respawn, count, variant and AI team 0. In
+   versions 1 to 3, a writer never puts one, but a reader takes it under
+   the list above alone: path index 0xFFFF, team -1 to 7, game types
+   within 0x1F, only the flags its version has (never initial spawn), and
+   no AI team, AI off, AI respawn or physics.
 
    In place of the list above:
    - a **teleporter** (7, 8): team (its channel) 0 to 15; respawn, count,
