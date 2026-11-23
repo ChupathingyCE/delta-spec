@@ -5,6 +5,12 @@
 - HOST_RULES flag 0x10, `air_turn_aim`: a shot fired while turned around in
   mid-air goes where the player aims (the "180 glitch" fixed), off by
   default ([peer.md](peer.md#host-rules), [registry.md](registry.md#host-rules-flags)).
+- [ports.md](ports.md#version-rules-for-a-port) says louder that a Delta
+  host sends the settings record of the older of its own number and the
+  HELLO's, so HELLO can't raise it. In place of 0.9.1's example, how our
+  hosts pick the number they announce: an MCC map's game, a pinned
+  number, the signed table's row, or the built-in 41 (32 on a console) for
+  a wire with no row.
 
 ## 2026-11-19
 
