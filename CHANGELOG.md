@@ -5,6 +5,9 @@
 - HOST_RULES flag 0x10, `air_turn_aim`: a shot fired while turned around in
   mid-air goes where the player aims (the "180 glitch" fixed), off by
   default ([peer.md](peer.md#host-rules), [registry.md](registry.md#host-rules-flags)).
+- [federation.md](federation.md#plain-accounts): a network may run plain
+  accounts without certificates. Their names show as plain names;
+  certificate-checked names are a level above, with the verified mark.
 
 ## 2026-11-19
 
