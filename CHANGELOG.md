@@ -15,6 +15,10 @@
 - [federation.md](federation.md#plain-accounts): a network may run plain
   accounts without certificates. Their names show as plain names;
   certificate-checked names are a level above, with the verified mark.
+- [forge.md](forge.md): Forge layout files (`.hmv`, `HFRG`, versions 1 to
+  7), byte by byte, with every check a reader makes, so any client can
+  read and write them. Network Forge is noted; its wire format comes
+  later.
 
 ## 2026-11-19
 

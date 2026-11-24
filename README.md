@@ -132,6 +132,7 @@ of a game.
 | [clients.md](clients.md) | registering an app that signs players in on the site |
 | [security.md](security.md) | how Delta treats hostile input, and where each part's checks are |
 | [ports.md](ports.md) | a port's path to playing with everyone, with the reference client and its tools |
+| [forge.md](forge.md) | Forge layout files (`.hmv`), byte by byte, and the checks a reader makes |
 | [federation.md](federation.md) | proposal: other networks running their own accounts and servers, with names checked across all of them |
 | [social/](social/README.md) | Delta Social (draft): friends, presence, invites and joins, parties, party chat, chat, voice, clans, platforms, moderation |
 | [MOVING.md](MOVING.md) | what lives in this repository, and what stays with the game |
