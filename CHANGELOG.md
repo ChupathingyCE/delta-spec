@@ -12,6 +12,9 @@
   request.
 - [ports.md](ports.md#license) said the reference client was GPL-3.0; it
   is MIT, as reference/LICENSE says.
+- [federation.md](federation.md#plain-accounts): a network may run plain
+  accounts without certificates. Their names show as plain names;
+  certificate-checked names are a level above, with the verified mark.
 
 ## 2026-11-19
 
