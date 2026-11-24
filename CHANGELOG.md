@@ -5,6 +5,20 @@
 - HOST_RULES flag 0x10, `air_turn_aim`: a shot fired while turned around in
   mid-air goes where the player aims (the "180 glitch" fixed), off by
   default ([peer.md](peer.md#host-rules), [registry.md](registry.md#host-rules-flags)).
+- The internet listing's flags and 8-byte stamp, shared with OpenCE's
+  builds, are in the registry ([registry.md](registry.md#internet-listing),
+  registry.json's `internet_listing`), with how to ask for one. Flag 64
+  and stamp byte 1 are reserved for Content Evolved, pending its pull
+  request.
+- [ports.md](ports.md#license) said the reference client was GPL-3.0; it
+  is MIT, as reference/LICENSE says.
+- [federation.md](federation.md#plain-accounts): a network may run plain
+  accounts without certificates. Their names show as plain names;
+  certificate-checked names are a level above, with the verified mark.
+- [forge.md](forge.md): Forge layout files (`.hmv`, `HFRG`, versions 1 to
+  7), byte by byte, with every check a reader makes, so any client can
+  read and write them. Network Forge is noted; its wire format comes
+  later.
 - [ports.md](ports.md#version-rules-for-a-port) says louder that a Delta
   host sends the settings record of the older of its own number and the
   HELLO's, so HELLO can't raise it. In place of 0.9.1's example, how our

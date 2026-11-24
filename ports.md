@@ -363,5 +363,8 @@ defaults, and the script's settings win over it.
 
 ## License
 
-The reference client and the tools are GPL-3.0-or-later. The protocol itself
+The reference client and its tools in [reference/](reference/) are MIT
+([reference/LICENSE](reference/LICENSE)). The capture tool in the game's
+repository (`tools/delta_ref_capture/`) is part of the game and is
+GPL-3.0-or-later; you don't need it to test your port. The protocol itself
 is not licensed code: speaking Delta puts no license duty on your port.
