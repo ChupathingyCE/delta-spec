@@ -697,9 +697,12 @@ trusted network already has is left out, and the log says so.
      and only a fully proven claim counts: the issuer certificate signed by
      a root key of that network that is in date, the signature good, the
      certificate itself in date. The home network's issuer is never
-     refused: another network's proven claim on one of the home network's
-     issuer keys is refused (for as long as the game runs) and the home
-     issuer stays accepted, whichever of the two the game saw first. If
+     refused: once the game has seen the home network's certificate for an
+     issuer key, another network's proven claim on that key is refused and
+     the home issuer stays accepted. A claim seen before the home
+     certificate counts until the home certificate arrives. The game keeps
+     the home issuer keys it has seen (at least 16, the oldest dropped
+     first) only while it runs; after a restart it learns them again. If
      two other networks' proven claims name the same issuer key, the game
      refuses that issuer for both and logs it. A claim that isn't fully
      proven (out of date, or under a root key past its `until`) refuses
