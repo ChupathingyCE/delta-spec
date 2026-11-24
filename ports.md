@@ -111,7 +111,7 @@ Each game has one network version: the number its host announces.
   | a game on an MCC map | 44 today, the number OpenCE's MCC machines play; Delta machines with `mcc_maps` learn it from HOST_NUMBER ([peer.md](peer.md)) |
   | the host pins one (`network.announce`; a dedicated server's `HALO_NET_ANNOUNCE`) | that number, if the build joins it and it's no newer than the rows below allow (else the rows below decide, and the log says so); `latest`, the default, pins nothing |
   | the signed legacy table has a row for the build's wire | the row's `announce`, or a newer number its `hosting` list names ([Auto-announce](versioning.md#auto-announce)) |
-  | no row for the wire: a desktop build or a dedicated server | 41, built in (`DELTA_BUILT_IN_HOSTING`): a new wire, such as 0.9.2's `chupa-44b` today, hosts as the last release's row did until a row is signed for it |
+  | no row for the wire: a desktop build or a dedicated server | 41, built in (`DELTA_BUILT_IN_HOSTING`): `chupa-41a`'s announce, which a new wire hosts at until a signed row for it says otherwise |
   | no row for the wire: a console build | its own built-in number, 32 |
 
   The table is at `/v1/delta/legacy` on the site, or on the `delta-table`

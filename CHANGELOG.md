@@ -9,8 +9,10 @@
   host sends the settings record of the older of its own number and the
   HELLO's, so HELLO can't raise it. In place of 0.9.1's example, how our
   hosts pick the number they announce: an MCC map's game, a pinned
-  number, the signed table's row, or the built-in 41 (32 on a console) for
-  a wire with no row.
+  number, the signed table's row, or the built-in 41 (`chupa-41a`'s
+  announce; 32 on a console) for a wire with no row. The built-in 41 is
+  `chupa-41a`'s number, not the last release's row
+  ([versioning.md](versioning.md#legacy-versions)).
 
 ## 2026-11-19
 
