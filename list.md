@@ -12,6 +12,73 @@ additions to a plain listing:
 - the plain-text console list keeps its format; new fields go only at the
   end of a line, never changing existing ones.
 
+## Where public games are
+
+A host of a public game (a player's or a dedicated server) does two things
+at once:
+
+- it publishes a signed listing of its game on internet play's brokers
+  (the flags and stamp are in [registry.md](registry.md#internet-listing));
+- it announces the game to the site (`POST /v1/announce`, below), when the
+  game has no password and its host hasn't turned listing off.
+
+So a client that reads only the brokers already sees every public game a
+host lists there, password games included. The site's list
+(`/v1/games.txt`) adds the extras: Delta's fields, and games announced to
+the site alone. OpenCE's brokers are public MQTT brokers. The site also
+reads them, and OpenCE's public master list: a game found there and not
+announced shows on the site's list as OpenCE's protocol. Chupathingy's
+client reads both the brokers and the site's list, and either one alone
+still shows the games it carries.
+
+## The announcement
+
+`POST /v1/announce`, form encoded (`application/x-www-form-urlencoded`,
+UTF-8). The fields, in the order Chupathingy's builds send them; the site
+reads each by name, and a field it doesn't know is ignored:
+
+| Field | What it is |
+| --- | --- |
+| `invite` | the game's internet play invite, 64 characters, as in its invite link |
+| `name` | the game's name, UTF-8. Send at most 16 characters: Chupathingy's clients show no more. The site takes up to 32 |
+| `map` | the map's name as the game loads it (`bloodgulch`; `<file>@ce` and the other forms in `family` below) |
+| `map_title`, `map_pack`, `map_tag` | optional: an Xbox map pack's map's own name, its pack and the pack's tag; or an MCC map's own name with `map_tag` `MCC` |
+| `workshop_id`, `workshop_title` | optional: an MCC map's Steam Workshop item |
+| `engine` | the game type's engine: 1 CTF, 2 Slayer, 3 Oddball, 4 King of the Hill, 5 Race, 6 Bomb ([peer.md](peer.md)) |
+| `gametype` | optional: the game type's name |
+| `players`, `maximum_players` | the players in the game, and its limit |
+| `open` | `1` when the game takes joins now, else `0` |
+| `score_limit` | the game type's score limit |
+| `teams` | `1` for a team game, else `0` |
+| `version` | the network version the host announces |
+| Delta's fields | below ([The host's fields](#the-hosts-fields)), with `locked` among them |
+| `playlist` | optional, a dedicated server's: its playlist's id on the site, `a-z 0-9 _`, at most 32 characters |
+| `badge_cert`, `badge_time`, `badge_signature` | optional, a dedicated server's: its server badge (dormant: no badge key is issued yet) |
+| `roster` | last: the players, `team:name` joined by `\|` (`0:Alice\|1:Bob`; team -1 in a game without teams), a name holding no `\|` |
+
+The roster goes last so that a cut-short form loses only players.
+
+The site answers 200 and `ok <seconds>` when the game is listed: it stays
+listed that long (75 seconds today) unless announced again. Any other
+answer is a refusal, with its reason as text, for example:
+
+| Answer | What it means |
+| --- | --- |
+| `listed from another address` | the invite is already listed by another address |
+| `too many games from this address` | this address lists as many games as it may |
+| `taken off the list` | the game was taken off the list, and isn't listed again now |
+| `the list is full` | the list takes no new games now |
+
+A host that is refused waits before it tries again (Chupathingy's wait 15
+seconds) and never retries at once.
+
+`POST /v1/withdraw` with the one field `invite` takes the game off the
+list. Only the address that announced the game can withdraw it. A host
+withdraws when it stops hosting, when its game turns private
+or gets a password, and before it lists a new invite. A game whose host
+stops announcing drops off the list by itself after a while, so a host
+that quits without withdrawing is no harm.
+
 ## The host's fields
 
 A host's announcement (`POST /v1/announce`, form encoded; `browser.c`'s
@@ -25,6 +92,7 @@ last):
 | `arch` | `x64`, `x86`, `arm64` or `arm` |
 | `build` | the build's version (`0.7.1b`) |
 | `capabilities` | the capabilities it offers, 8 hexadecimal digits; two bits are set here alone: 12 (`ping`), by a host that answers pings before joining, and 18 (`host_cheats`), by a host with `network.host_cheats` on |
+| `locked` | optional: `1` while the host takes no new machines |
 | `machines` | while hosting with Delta: the game's machines by platform, `pc_linux:2,xbox:1,legacy:1` (`legacy`: a machine without Delta; `unknown`: a Delta machine that does not share its platform; a dedicated server leaves itself out). Counts only, never a player |
 
 Compatibility both ways: a site from before these fields ignores them (it
@@ -32,6 +100,33 @@ reads the fields it knows), and the site reads each on its own, leaving out
 one it can't read rather than refusing the announcement, so older builds
 (which send none) and newer ones (a longer platform key, a platform it
 doesn't know) are listed as ever.
+
+## The game list's lines
+
+`GET /v1/games.txt` is plain text, one game a line, fields separated by a
+tab. A line's first fields:
+
+| Field | What it is |
+| --- | --- |
+| 1 | `invite` |
+| 2 | `name` |
+| 3 | `map` |
+| 4 | `engine` |
+| 5 | `players` |
+| 6 | `maximum_players` |
+| 7 | `open` |
+| 8 | `version` |
+| 9 | the listing's age (Chupathingy's client doesn't read it) |
+| 10 | `score_limit` |
+| 11 | `teams` |
+| 12 | `roster`, as announced |
+
+`?fields=N` asks for the fields up to N; the ones after 12 are below. A
+client reads the fields it gets and ignores any past the ones it knows; a
+line with fewer than 8 fields, or an invite that isn't 64 characters, is
+skipped. Some games are listed only to a client that asks for them: a game
+on engine 6 (Bomb) only with `fields` of 19 or more, and a co-op game only
+with `coop=1`.
 
 From them the site lists each game's `platform`, `hosting` (`official`:
 Chupathingy's `[C]` servers, by their hosts; `dedicated`; `player`),
@@ -57,6 +152,30 @@ protocol after its tenth field, which Warthog's reader passes over.
 A player's own copy also says its platform (`"platform"`) when it confirms
 its line (`/v1/claim`) or reports a game it joined (`/v1/client_report`),
 for the site's "Played on" profile badges.
+
+## Announcing from another client
+
+`POST /v1/announce` is open to any client, not only Chupathingy's. A port,
+fork or tool that hosts a game anyone can join from its invite may
+announce it:
+
+- **Say who you are.** Put your own build name and version in `build`
+  (`myport 0.3`, never a Chupathingy version) and your platform key in
+  `platform_key`, with your platform's number from the registry
+  ([registry.md](registry.md#platforms)). Send `delta` `0` unless your
+  host answers HELLO.
+- **Announce on change, plus a keep-alive.** Chupathingy's hosts announce
+  when the game changes (players join or leave, the map or the game type
+  changes), at most once every 3 seconds, and otherwise every 20 seconds
+  to keep the game listed. After a refused announcement of a game
+  that isn't listed yet they wait 15 seconds; a listed game keeps its
+  usual pace (20 seconds, or 3 after a change). Never announce every frame.
+- **Withdraw when you stop** (`POST /v1/withdraw`).
+- **Read the list the same way** ([The game list's lines](#the-game-lists-lines)).
+  A game you announce shows with the platform your key names.
+
+Announcing is optional: every browser that reads the brokers already sees
+a game listed there ([Where public games are](#where-public-games-are)).
 
 ## Pings before joining
 

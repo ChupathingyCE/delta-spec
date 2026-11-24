@@ -5,6 +5,36 @@
 - HOST_RULES flag 0x10, `air_turn_aim`: a shot fired while turned around in
   mid-air goes where the player aims (the "180 glitch" fixed), off by
   default ([peer.md](peer.md#host-rules), [registry.md](registry.md#host-rules-flags)).
+- The internet listing's flags and 8-byte stamp, shared with OpenCE's
+  builds, are in the registry ([registry.md](registry.md#internet-listing),
+  registry.json's `internet_listing`), with how to ask for one. Flag 64
+  and stamp byte 1 are reserved for Content Evolved, pending its pull
+  request.
+- [ports.md](ports.md#license) said the reference client was GPL-3.0; it
+  is MIT, as reference/LICENSE says.
+- [federation.md](federation.md#plain-accounts): a network may run plain
+  accounts without certificates. Their names show as plain names;
+  certificate-checked names are a level above, with the verified mark.
+- [forge.md](forge.md): Forge layout files (`.hmv`, `HFRG`, versions 1 to
+  7), byte by byte, with every check a reader makes, so any client can
+  read and write them. Network Forge is noted; its wire format comes
+  later.
+- [ports.md](ports.md#version-rules-for-a-port) says louder that a Delta
+  host sends the settings record of the older of its own number and the
+  HELLO's, so HELLO can't raise it. In place of 0.9.1's example, how our
+  hosts pick the number they announce: an MCC map's game, a pinned
+  number, the signed table's row, or the built-in 41 (`chupa-41a`'s
+  announce; 32 on a console) for a wire with no row. The built-in 41 is
+  `chupa-41a`'s number, not the last release's row
+  ([versioning.md](versioning.md#legacy-versions)).
+- [list.md](list.md): hosts publish to the brokers and announce to the
+  site, so the brokers alone show every public game and the site's list
+  adds the extras. The whole announcement form, the withdrawal, the game
+  list's first twelve fields, and how another client announces: its own
+  `build` and `platform_key`, on change plus a 20-second keep-alive.
+  The site's answers too: `ok <seconds>` and its refusals, withdrawal only
+  from the announcing address, Bomb and co-op games only to clients that
+  ask, and the name's limit.
 - Platform numbers are per platform, not per project: a fork or another
   project uses its platform's number and tells itself apart by its build
   name and wire. A web build gets a number like any other platform

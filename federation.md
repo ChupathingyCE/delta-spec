@@ -94,6 +94,19 @@ Federation adds one thing: **which networks' root keys to trust.**
 
 A network can be as small as one site and one signer process.
 
+## Plain accounts
+
+A network may also run accounts without certificates: IDs alone, with no
+root keys and no issuer. Its players sign in, keep a profile and play as
+usual. No game can check such a name, so it shows as a plain name, the
+same as a player's game name ([Verified names](peer.md#verified-names)).
+A name checked against a certificate is a level above it: the game shows
+the verified mark beside it. A plain name never shows the mark, and one
+that looks like a verified player's handle is masked as for anyone else.
+
+A network can start with plain accounts and add certificates later. Its
+players' names gain the mark once it does.
+
 ## Between networks
 
 What works across networks from the start:
