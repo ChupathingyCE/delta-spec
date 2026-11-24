@@ -22,14 +22,15 @@ is in [peer.md](peer.md#platform-policy) and in registry.json's
 `platform_policy`.
 
 A number is for a platform, not for a project. A platform is a class of
-device that needs its own limits: its own row in the platform policy
-(memory, players it hosts and joins, co-op). That is why the Steam Deck (5)
-and a legacy PC (18) have numbers of their own beside Linux (3) and
-Windows (1). Any build for a platform in the table sends that platform's
-number, whoever made it; a fork or another project tells itself apart by
-its build name (HELLO's build text, the game list's `build`) and, where it
-has one, its wire, never by a number of its own. A new number is for a
-device that needs limits no row has yet. A web build is a platform like
+device that hosts and lists tell apart: by its limits (its platform policy
+row: memory, players it hosts and joins, co-op; several platforms may share
+one, as the desktop systems do) and by its tag on the game list. That is
+why the Steam Deck (5) and a legacy PC (18) have numbers of their own
+beside Linux (3) and Windows (1). Any build for a platform in the table
+sends that platform's number, whoever made it; a fork or another project
+tells itself apart by its build name (HELLO's build text, the game list's
+`build`) and, where it has one, its wire, never by a number of its own. A
+new number is for a class of device none in the table describes. A web build is a platform like
 any other: it gets its number by pull request when someone asks for it.
 The First port column names the port a number was first given for; any
 build for that platform uses it.
