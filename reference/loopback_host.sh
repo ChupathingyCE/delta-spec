@@ -6,7 +6,8 @@
 # alone: never listed, never public, nothing announced anywhere.
 #
 #   loopback_host.sh --server BIN --maps DIR [--map NAME] [--gametype NAME]
-#                    [--announce N] [--players N] [--address 127.0.0.X]
+#                    [--announce N] [--wire NAME] [--players N]
+#                    [--address 127.0.0.X]
 #                    [--broadcast 127.0.0.Y,...] [--work DIR] [--seconds N]
 #
 #   --server    the server program (chupathingyce-server from a release, or
@@ -17,7 +18,13 @@
 #   --map       the map (bloodgulch); --gametype the game type (slayer)
 #   --announce  the OpenCE network version the server announces (default:
 #               the build's own); our clients join a range around it, an
-#               OpenCE-style client only its exact number
+#               OpenCE-style client only its exact number. The script gives
+#               the server a local legacy table row for its wire that
+#               announces N and joins 11 to 45 (or out to N), as the signed
+#               table does for chupa-44a and chupa-44b, so a released server
+#               announces N without fetching that table
+#   --wire      the server's wire (chupa-44a for 0.9.1a), for --announce;
+#               read from the server program when left out
 #   --players   the most players (12)
 #   --address   the loopback address to host on (127.0.0.1); another of
 #               127.0.0.0/8 lets two copies run on one Linux machine
@@ -47,7 +54,7 @@
 
 set -euo pipefail
 
-server="" maps="" map="bloodgulch" gametype="slayer" announce="" players="12" work="" seconds="" address="127.0.0.1" broadcast=""
+server="" maps="" map="bloodgulch" gametype="slayer" announce="" wire="" players="12" work="" seconds="" address="127.0.0.1" broadcast=""
 while [ $# -gt 0 ]; do
 	case "$1" in
 		--server) server="$2"; shift 2 ;;
@@ -55,6 +62,7 @@ while [ $# -gt 0 ]; do
 		--map) map="$2"; shift 2 ;;
 		--gametype) gametype="$2"; shift 2 ;;
 		--announce) announce="$2"; shift 2 ;;
+		--wire) wire="$2"; shift 2 ;;
 		--players) players="$2"; shift 2 ;;
 		--address) address="$2"; shift 2 ;;
 		--broadcast) broadcast="$2"; shift 2 ;;
@@ -83,6 +91,27 @@ for each in ${broadcast//,/ }; do
 		*[!0-9.]*) echo "loopback_host.sh: --broadcast takes IPv4 addresses" >&2; exit 2 ;;
 	esac
 done
+if [ -n "$announce" ]; then
+	case "$announce" in
+		''|*[!0-9]*) echo "loopback_host.sh: --announce takes a number" >&2; exit 2 ;;
+	esac
+	if [ "$announce" -lt 1 ] || [ "$announce" -gt 65535 ]; then
+		echo "loopback_host.sh: --announce takes 1 to 65535" >&2; exit 2
+	fi
+	if [ -z "$wire" ]; then
+		wire="$(LC_ALL=C grep -aoE 'chupa-[0-9]+[a-z]' "$server" | sort -u)" || true
+		case "$wire" in
+			chupa-*[!a-z0-9-]*|'') echo "loopback_host.sh: can't tell the server's wire from the program; name it with --wire (its log says it: \"wire chupa-44a\")" >&2; exit 2 ;;
+		esac
+	fi
+	case "$wire" in
+		chupa-*) ;;
+		*) echo "loopback_host.sh: --wire is a wire name, such as chupa-44a" >&2; exit 2 ;;
+	esac
+	case "$wire" in
+		*[!a-z0-9-]*) echo "loopback_host.sh: --wire is a wire name, such as chupa-44a" >&2; exit 2 ;;
+	esac
+fi
 case "$map$gametype" in
 	*[!A-Za-z0-9_@.-]*) echo "loopback_host.sh: map and game type are plain names" >&2; exit 2 ;;
 esac
@@ -102,9 +131,20 @@ for entry in "$maps"/*; do
 done
 printf '%s %s\n' "$map" "$gametype" > "$work/data/playlists/delta-loopback.txt"
 : > "$work/brokers-none.txt"
-# (a local legacy table with no rows: the build's own numbers, and no signed
-# table fetched from the site or GitHub, nor passed on)
-printf '{"delta_legacy": 1, "serial": 1, "wires": {}}\n' > "$work/legacy-local.json"
+# (a local legacy table, so no signed table is fetched from the site or
+# GitHub, nor passed on: with no rows, the build's own numbers; with
+# --announce, a row for the server's wire that announces it, since the
+# server pins no number past what its table's row allows)
+if [ -n "$announce" ]; then
+	minimum=11 maximum=45
+	[ "$announce" -lt "$minimum" ] && minimum="$announce"
+	[ "$announce" -gt "$maximum" ] && maximum="$announce"
+	printf '{"delta_legacy": 1, "serial": 1, "wires": {"%s": {"announce": %s, "minimum": %s, "maximum": %s}}}\n' \
+		"$wire" "$announce" "$minimum" "$maximum" > "$work/legacy-local.json"
+	echo "loopback_host.sh: announcing $announce on wire $wire (joins $minimum to $maximum)"
+else
+	printf '{"delta_legacy": 1, "serial": 1, "wires": {}}\n' > "$work/legacy-local.json"
+fi
 
 pid=""
 # (called by the trap below)

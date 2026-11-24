@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- `reference/loopback_host.sh --announce N` works with released servers:
+  their local legacy table now has a row for the server's wire that
+  announces N (joins 11 to 45), where an empty one left a 0.9.1a server at
+  its built-in 41. `--wire` names the wire if the script can't read it
+  from the server program ([ports.md](ports.md#testing-your-port)).
 - Federation, proposal: a certificate's network is the one whose root key
   signed its issuer certificate, so no certificate changes and today's read
   as `chupathingy.org`; roots.json, the signed list of networks, local
