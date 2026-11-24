@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+- Content Evolved's numbers, at Watanoge's request: a version word of
+  0xFF00 to 0xFFFF in the advertisement is a Content Evolved modded game,
+  whose 26 reserved bytes are all Content Evolved's; listing flag 64
+  (`modded`) and stamp byte 1 (`mod_version`) are in use by it. The
+  advertisement's stock layout is in the registry too, with the MCC
+  network protocol's flag 0x08 and byte 4, which were missing
+  ([peer.md](peer.md#the-advertisement), [registry.md](registry.md#lan-advertisement),
+  registry.json's `advertisement`).
 - `reference/loopback_host.sh --announce N` works with released servers:
   their local legacy table now has a row for the server's wire that
   announces N (joins 11 to 45), where an empty one left a 0.9.1a server at
