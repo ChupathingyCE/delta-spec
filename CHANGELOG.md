@@ -36,7 +36,8 @@
   from the announcing address, Bomb and co-op games only to clients that
   ask, and the name's limit.
 - Platform numbers are per platform, not per project. A platform is a
-  class of device with its own limits (its own policy row); a fork or
+  class of device that hosts and lists tell apart (several may share one
+  policy row); a fork or
   another project uses its platform's number and tells itself apart by
   its build name and wire. The registry's For column is now First port. A web build gets a number like any other platform
   ([registry.md](registry.md#platforms), [ports.md](ports.md#the-short-version)).
