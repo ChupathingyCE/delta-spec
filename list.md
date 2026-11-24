@@ -51,8 +51,7 @@ reads each by name, and a field it doesn't know is ignored:
 | `score_limit` | the game type's score limit |
 | `teams` | `1` for a team game, else `0` |
 | `version` | the network version the host announces |
-| Delta's fields | below ([The host's fields](#the-hosts-fields)) |
-| `locked` | optional: `1` while the host takes no new machines |
+| Delta's fields | below ([The host's fields](#the-hosts-fields)), with `locked` among them |
 | `playlist` | optional, a dedicated server's: its playlist's id on the site, `a-z 0-9 _`, at most 32 characters |
 | `badge_cert`, `badge_time`, `badge_signature` | optional, a dedicated server's: its server badge (dormant: no badge key is issued yet) |
 | `roster` | last: the players, `team:name` joined by `\|` (`0:Alice\|1:Bob`; team -1 in a game without teams), a name holding no `\|` |
@@ -93,6 +92,7 @@ last):
 | `arch` | `x64`, `x86`, `arm64` or `arm` |
 | `build` | the build's version (`0.7.1b`) |
 | `capabilities` | the capabilities it offers, 8 hexadecimal digits; two bits are set here alone: 12 (`ping`), by a host that answers pings before joining, and 18 (`host_cheats`), by a host with `network.host_cheats` on |
+| `locked` | optional: `1` while the host takes no new machines |
 | `machines` | while hosting with Delta: the game's machines by platform, `pc_linux:2,xbox:1,legacy:1` (`legacy`: a machine without Delta; `unknown`: a Delta machine that does not share its platform; a dedicated server leaves itself out). Counts only, never a player |
 
 Compatibility both ways: a site from before these fields ignores them (it
@@ -167,8 +167,9 @@ announce it:
 - **Announce on change, plus a keep-alive.** Chupathingy's hosts announce
   when the game changes (players join or leave, the map or the game type
   changes), at most once every 3 seconds, and otherwise every 20 seconds
-  to keep the game listed. After a failed announcement they wait 15
-  seconds. Never announce every frame.
+  to keep the game listed. After a refused announcement of a game
+  that isn't listed yet they wait 15 seconds; a listed game keeps its
+  usual pace (20 seconds, or 3 after a change). Never announce every frame.
 - **Withdraw when you stop** (`POST /v1/withdraw`).
 - **Read the list the same way** ([The game list's lines](#the-game-lists-lines)).
   A game you announce shows with the platform your key names.
