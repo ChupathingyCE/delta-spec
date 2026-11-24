@@ -27,6 +27,14 @@
   announce; 32 on a console) for a wire with no row. The built-in 41 is
   `chupa-41a`'s number, not the last release's row
   ([versioning.md](versioning.md#legacy-versions)).
+- [list.md](list.md): hosts publish to the brokers and announce to the
+  site, so the brokers alone show every public game and the site's list
+  adds the extras. The whole announcement form, the withdrawal, the game
+  list's first twelve fields, and how another client announces: its own
+  `build` and `platform_key`, on change plus a 20-second keep-alive.
+  The site's answers too: `ok <seconds>` and its refusals, withdrawal only
+  from the announcing address, Bomb and co-op games only to clients that
+  ask, and the name's limit.
 
 ## 2026-11-19
 
