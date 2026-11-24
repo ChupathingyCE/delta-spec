@@ -10,6 +10,9 @@
   adds the extras. The whole announcement form, the withdrawal, the game
   list's first twelve fields, and how another client announces: its own
   `build` and `platform_key`, on change plus a 20-second keep-alive.
+  The site's answers too: `ok <seconds>` and its refusals, withdrawal only
+  from the announcing address, Bomb and co-op games only to clients that
+  ask, and the name's limit.
 
 ## 2026-11-19
 

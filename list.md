@@ -25,9 +25,11 @@ at once:
 So a client that reads only the brokers already sees every public game a
 host lists there, password games included. The site's list
 (`/v1/games.txt`) adds the extras: Delta's fields, and games announced to
-the site alone. The site also reads OpenCE's brokers: a game listed there
-and not announced shows on the site's list as OpenCE's protocol. Chupathingy's client
-reads both, and either one alone still shows the games it carries.
+the site alone. OpenCE's brokers are public MQTT brokers. The site also
+reads them, and OpenCE's public master list: a game found there and not
+announced shows on the site's list as OpenCE's protocol. Chupathingy's
+client reads both the brokers and the site's list, and either one alone
+still shows the games it carries.
 
 ## The announcement
 
@@ -38,11 +40,11 @@ reads each by name, and a field it doesn't know is ignored:
 | Field | What it is |
 | --- | --- |
 | `invite` | the game's internet play invite, 64 characters, as in its invite link |
-| `name` | the game's name, UTF-8, at most 16 characters |
+| `name` | the game's name, UTF-8. Send at most 16 characters: Chupathingy's clients show no more. The site takes up to 32 |
 | `map` | the map's name as the game loads it (`bloodgulch`; `<file>@ce` and the other forms in `family` below) |
 | `map_title`, `map_pack`, `map_tag` | optional: an Xbox map pack's map's own name, its pack and the pack's tag; or an MCC map's own name with `map_tag` `MCC` |
 | `workshop_id`, `workshop_title` | optional: an MCC map's Steam Workshop item |
-| `engine` | the game type's engine: 1 CTF, 2 Slayer, 3 Oddball, 4 King of the Hill, 5 Race |
+| `engine` | the game type's engine: 1 CTF, 2 Slayer, 3 Oddball, 4 King of the Hill, 5 Race, 6 Bomb ([peer.md](peer.md)) |
 | `gametype` | optional: the game type's name |
 | `players`, `maximum_players` | the players in the game, and its limit |
 | `open` | `1` when the game takes joins now, else `0` |
@@ -55,11 +57,25 @@ reads each by name, and a field it doesn't know is ignored:
 | `badge_cert`, `badge_time`, `badge_signature` | optional, a dedicated server's: its server badge (dormant: no badge key is issued yet) |
 | `roster` | last: the players, `team:name` joined by `\|` (`0:Alice\|1:Bob`; team -1 in a game without teams), a name holding no `\|` |
 
-The roster goes last so that a cut-short form loses only players. The
-site answers 200 when the game is listed.
+The roster goes last so that a cut-short form loses only players.
+
+The site answers 200 and `ok <seconds>` when the game is listed: it stays
+listed that long (75 seconds today) unless announced again. Any other
+answer is a refusal, with its reason as text, for example:
+
+| Answer | What it means |
+| --- | --- |
+| `listed from another address` | the invite is already listed by another address |
+| `too many games from this address` | this address lists as many games as it may |
+| `taken off the list` | the game was taken off the list, and isn't listed again now |
+| `the list is full` | the list takes no new games now |
+
+A host that is refused waits before it tries again (Chupathingy's wait 15
+seconds) and never retries at once.
 
 `POST /v1/withdraw` with the one field `invite` takes the game off the
-list. A host withdraws when it stops hosting, when its game turns private
+list. Only the address that announced the game can withdraw it. A host
+withdraws when it stops hosting, when its game turns private
 or gets a password, and before it lists a new invite. A game whose host
 stops announcing drops off the list by itself after a while, so a host
 that quits without withdrawing is no harm.
@@ -108,7 +124,9 @@ tab. A line's first fields:
 `?fields=N` asks for the fields up to N; the ones after 12 are below. A
 client reads the fields it gets and ignores any past the ones it knows; a
 line with fewer than 8 fields, or an invite that isn't 64 characters, is
-skipped.
+skipped. Some games are listed only to a client that asks for them: a game
+on engine 6 (Bomb) only with `fields` of 19 or more, and a co-op game only
+with `coop=1`.
 
 From them the site lists each game's `platform`, `hosting` (`official`:
 Chupathingy's `[C]` servers, by their hosts; `dedicated`; `player`),
