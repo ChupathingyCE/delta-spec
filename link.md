@@ -632,11 +632,15 @@ the signature's 128 hex digits, a line feed, then the document. A
 network's Delta List serves the two at `/v1/delta/networks` and
 `/v1/delta/networks.sig`, as they are. A game fetches them from its own
 network's site, at start and every few hours, and keeps the newest it
-took; it ships with the list as it was at its release.
+took; it ships with the list as it was at its release. A list has no
+expiry in this version: a game that can't fetch a newer one (its site is
+down or blocked) keeps the one it has, so a network taken off the list
+stays trusted on that machine until a newer list arrives.
 
 To be listed, a network publishes its roots.json and asks the list's
-publisher, who fetches it from the network's address, checks every proof
-and puts the keys in the next list. Being listed means only that the
+publisher, who fetches it from the network's address over HTTPS, following
+no redirect to another host, checks every proof and puts the keys in the
+next list. Being listed means only that the
 network's names are checked; it gives no one access to anything.
 
 **Reading the list and roots.json** is strict, and anything wrong refuses
@@ -671,14 +675,35 @@ trusted network already has is left out, and the log says so.
 
 **How a game checks a name**, offline (no network is asked anything):
 
-1. Read the CISS ("Device identity"). Find the trusted network one of whose
-   root keys, in date (now at most `until`, when set), signed it. None: the
-   name isn't checked, and the player shows by their game name.
+1. Read the CISS that came with the proof or card ("Device identity"): the
+   network is bound to that issuer certificate, never looked up by the
+   CDEV's issuer key ID alone. Find the trusted network one of whose root
+   keys signed it, and check that key is in date (now at most `until`,
+   when set). None: the name isn't checked, and the player shows by their
+   game name.
+   - **Remember the answer.** Finding the network can cost one signature
+     check per trusted root key (up to 320: 64 listed networks and 16 local
+     ones, 4 keys each), and anyone in a game can send an issuer
+     certificate. A game keeps what it found for each issuer certificate
+     it has seen (the certificate's bytes, its network or none), at least
+     the last 256, so each one is looked for once.
+   - **Limit the looking.** On top of Delta Peer's limits on ID_PROOF and
+     ID_CARD, a game looks for at most 4 issuer certificates it hasn't
+     seen before from one machine a minute; a proof or card past that is
+     dropped as if it didn't check, and the log says so once.
+   - **One issuer, one network.** If the same issuer public key turns up in
+     issuer certificates signed by two networks' roots, the game refuses
+     that issuer for both and logs it: a key can only be one network's
+     issuer.
 2. Check the CISS and the CDEV exactly as "Device identity" and Delta
    Peer's "Verified names" say (dates, grace, `play`, the proof's
    signature), with that network's root keys alone. The revocation list
    applied is that network's own, where the game has it.
 3. The name is `handle:domain`: the CDEV's handle and the network's domain.
+   Handles and domains are compared byte by byte, as ASCII, after their
+   format is checked; nothing is normalized (no Unicode folding, and a
+   pattern check must reach the end of the text, so a trailing line feed
+   is refused).
    The account is the pair (domain, the CDEV's 16-byte account): the same
    16 bytes from two networks are two different accounts, so "one identity,
    one player" and every lookup by account goes by the pair.
