@@ -10,6 +10,8 @@
   registry.json's `internet_listing`), with how to ask for one. Flag 64
   and stamp byte 1 are reserved for Content Evolved, pending its pull
   request.
+- [ports.md](ports.md#license) said the reference client was GPL-3.0; it
+  is MIT, as reference/LICENSE says.
 
 ## 2026-11-19
 
