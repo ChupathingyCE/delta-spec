@@ -653,7 +653,9 @@ the whole file:
   (no fraction, exponent, `NaN` or `Infinity`), each in its field's range,
   `true` and `false` never taken as numbers, and nothing after the
   document but white space.
-- Hex in lowercase only. A domain that breaks the rules above, a root key
+- Hex in lowercase only, and written as plain digits: a root key or proof
+  with a `\u` escape in it refuses the file, even where it decodes to the
+  same digits. A domain that breaks the rules above, a root key
   of small order, a key twice, a roots.json whose `domain` isn't the
   address it came from, or a proof that doesn't check, refuses the file.
 
@@ -691,10 +693,17 @@ trusted network already has is left out, and the log says so.
      ID_CARD, a game looks for at most 4 issuer certificates it hasn't
      seen before from one machine a minute; a proof or card past that is
      dropped as if it didn't check, and the log says so once.
-   - **One issuer, one network.** If the same issuer public key turns up in
-     issuer certificates signed by two networks' roots, the game refuses
-     that issuer for both and logs it: a key can only be one network's
-     issuer.
+   - **One issuer, one network.** A key can only be one network's issuer,
+     and only a fully proven claim counts: the issuer certificate signed by
+     a root key of that network that is in date, the signature good, the
+     certificate itself in date. The home network's issuer is never
+     refused: another network's proven claim on one of the home network's
+     issuer keys is refused (for as long as the game runs) and the home
+     issuer stays accepted, whichever of the two the game saw first. If
+     two other networks' proven claims name the same issuer key, the game
+     refuses that issuer for both and logs it. A claim that isn't fully
+     proven (out of date, or under a root key past its `until`) refuses
+     nothing.
 2. Check the CISS and the CDEV exactly as "Device identity" and Delta
    Peer's "Verified names" say (dates, grace, `play`, the proof's
    signature), with that network's root keys alone. The revocation list
