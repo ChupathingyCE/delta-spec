@@ -42,7 +42,7 @@ belongs to this repository.
 - **The spec's maintainers approve it** ([MAINTAINERS.md](MAINTAINERS.md)).
   The number is assigned once the pull request is merged, not before.
 - **Never reused.** A number stays with what it was given to, even if that
-  project stops or the feature is retired.
+  platform's port stops or the feature is retired.
 - **Wire constants never change.** A label, magic or byte layout that is
   already on the wire stays as it is, even where it names a project
   (registry.md, "Labels").

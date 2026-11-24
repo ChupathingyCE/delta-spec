@@ -21,7 +21,21 @@ the game list; the tag is the short label on a game list row. Its policy row
 is in [peer.md](peer.md#platform-policy) and in registry.json's
 `platform_policy`.
 
-| Number | Key | Tag | Name | Class | For | Status |
+A number is for a platform, not for a project. A platform is a class of
+device that hosts and lists tell apart: by its limits (its platform policy
+row: memory, players it hosts and joins, co-op; several platforms may share
+one, as the desktop systems do) and by its tag on the game list. That is
+why the Steam Deck (5) and a legacy PC (18) have numbers of their own
+beside Linux (3) and Windows (1). Any build for a platform in the table
+sends that platform's number, whoever made it; a fork or another project
+tells itself apart by its build name (HELLO's build text, the game list's
+`build`) and, where it has one, its wire, never by a number of its own. A
+new number is for a class of device none in the table describes. A web build is a platform like
+any other: it gets its number by pull request when someone asks for it.
+The First port column names the port a number was first given for; any
+build for that platform uses it.
+
+| Number | Key | Tag | Name | Class | First port | Status |
 | --- | --- | --- | --- | --- | --- | --- |
 | 0 | `unknown` |  |  |  |  | a machine that doesn't say |
 | 1 | `pc_windows` | WIN | Windows | pc | Chupathingy | in use |
@@ -49,7 +63,8 @@ is in [peer.md](peer.md#platform-policy) and in registry.json's
 
 ### How to ask for a number
 
-Open a pull request on
+If your platform is in the table, use its number. If it isn't, open a
+pull request on
 [ChupathingyCE/delta-spec](https://github.com/ChupathingyCE/delta-spec)
 that adds the next number to this page and to registry.json, with its policy
 row: the platform, your port's name and link, roughly how much memory the

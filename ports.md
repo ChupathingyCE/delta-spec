@@ -15,8 +15,11 @@ test against.
 1. Your port already plays the legacy game protocol at some network version
    (call it N). That's what carries the game itself. Delta doesn't replace
    it.
-2. Ask us for a platform number ([registry.md](registry.md#how-to-ask-for-a-number)).
-   Don't pick one yourself.
+2. Use your platform's number from the registry. Numbers are per
+   platform, not per project: a port to a platform that already has one
+   uses it. If yours has none, ask for one
+   ([registry.md](registry.md#how-to-ask-for-a-number)). Don't pick one
+   yourself.
 3. Open one more UDP socket, the Delta socket. Once you've joined a game
    whose host says it speaks Delta, send HELLO to the host's port 5160 and
    wait up to 4 seconds for WELCOME. No answer means you play plainly, with
