@@ -329,6 +329,14 @@ reference/loopback_host.sh --server path/to/chupathingyce-server --maps path/to/
 (here a client bound to 127.0.0.2; Linux answers on all of 127.0.0.0/8, macOS
 needs `sudo ifconfig lo0 alias 127.0.0.2 up` first).
 
+`--announce` gives the server a local legacy table row for its wire that
+announces your number and joins 11 to 45, as the signed table does for
+`chupa-44a` and `chupa-44b`, so a released server (0.9.1a and later)
+announces it too. The script reads the wire from the server program; name it
+with `--wire chupa-44a` if it can't. The server's log says "announcing
+OpenCE network version 44, pinned by network.announce". Without
+`--announce`, the server announces its own built-in number.
+
 It hosts on 127.0.0.1 alone: system link bound to and announced on
 127.0.0.1, internet play, UPnP, the public lobby, the game list, stats,
 GameSpy, the site link and map downloads off, and a local legacy table, so
