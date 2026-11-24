@@ -19,6 +19,14 @@
   7), byte by byte, with every check a reader makes, so any client can
   read and write them. Network Forge is noted; its wire format comes
   later.
+- [ports.md](ports.md#version-rules-for-a-port) says louder that a Delta
+  host sends the settings record of the older of its own number and the
+  HELLO's, so HELLO can't raise it. In place of 0.9.1's example, how our
+  hosts pick the number they announce: an MCC map's game, a pinned
+  number, the signed table's row, or the built-in 41 (`chupa-41a`'s
+  announce; 32 on a console) for a wire with no row. The built-in 41 is
+  `chupa-41a`'s number, not the last release's row
+  ([versioning.md](versioning.md#legacy-versions)).
 - [list.md](list.md): hosts publish to the brokers and announce to the
   site, so the brokers alone show every public game and the site's list
   adds the extras. The whole announcement form, the withdrawal, the game

@@ -87,26 +87,40 @@ Each game has one network version: the number its host announces.
 - **Your client, joining a host without a Delta tag** (OpenCE's, or another
   port's): join only a host whose number you play. That's OpenCE's rule, an
   exact match, unless your code really plays a range.
-- **Your client, joining a Delta host:** say your N in HELLO. Our host
-  sends each Delta machine the game settings record of the older of its own
-  number and the one in that machine's HELLO, and what a newer number adds
-  is messages an older machine drops. That's how our own older console
-  builds play on newer hosts. To join a Delta host that announces a *newer*
-  number than your N, mark your join request (below) so the host waits for
-  your HELLO before it sends the record. We haven't tested a port this way
-  yet: try it against the loopback host with `--announce` set past your N
-  before you rely on it, and when in doubt, join only at your own number.
+- **Your client, joining a Delta host:** say your N in HELLO.
+  **A Delta host sends each Delta machine the game settings record of the
+  older of two numbers: the one it announces, and the one in that
+  machine's HELLO.** HELLO can't raise it: a HELLO of 44 to a host that
+  announces 32 gets 32's record. A machine without Delta gets the record of
+  the number the host announces. So a client that reads only N's record
+  joins only games announced at N. What a newer number adds is messages an
+  older machine drops; that's how our own older console builds play on
+  newer hosts. To join a Delta host that announces a *newer* number than
+  your N, mark your join request (below) so the host waits for your HELLO
+  before it sends the record. We haven't tested a port this way yet: try
+  it against the loopback host with `--announce` set past your N before
+  you rely on it, and when in doubt, join only at your own number.
 - **Your host:** announce your N. Our clients join hosts from 11 to 45
   today (the range rises with each network number we follow).
-- **Which number our hosts announce** comes from the signed legacy table
-  (`/v1/delta/legacy` on the site, or the `delta-table` branch on GitHub), the
-  row for each build's wire: the `announce` number, with `minimum` and
-  `maximum` the range its clients join. Today the row for 0.9.1's wire
-  (`chupa-44a`) says 32, and 44 for a game on an MCC map; a server's log
-  and `--version` say the number it announces.
-  You don't need the table to play. If you want it, check its Ed25519
-  signature against the keys in [The key](versioning.md#the-key), before you trust a
-  byte of it.
+- **Which number our hosts announce.** Read it from the host's
+  advertisement or listing; never assume one. A host of ours picks it like
+  this, the first that applies:
+
+  | When | The number |
+  | --- | --- |
+  | a game on an MCC map | 44 today, the number OpenCE's MCC machines play; Delta machines with `mcc_maps` learn it from HOST_NUMBER ([peer.md](peer.md)) |
+  | the host pins one (`network.announce`; a dedicated server's `HALO_NET_ANNOUNCE`) | that number, if the build joins it and it's no newer than the rows below allow (else the rows below decide, and the log says so); `latest`, the default, pins nothing |
+  | the signed legacy table has a row for the build's wire | the row's `announce`, or a newer number its `hosting` list names ([Auto-announce](versioning.md#auto-announce)) |
+  | no row for the wire: a desktop build or a dedicated server | 41, built in (`DELTA_BUILT_IN_HOSTING`): `chupa-41a`'s announce, which a new wire hosts at until a signed row for it says otherwise |
+  | no row for the wire: a console build | its own built-in number, 32 |
+
+  The table is at `/v1/delta/legacy` on the site, or on the `delta-table`
+  branch on GitHub: one row per wire, with `announce`, and `minimum` and
+  `maximum`, the range its clients join. A host takes a new number between
+  games, never during one. A server's log and `--version` say the number it
+  announces. You don't need the table to play. If you want it, check its
+  Ed25519 signature against the keys in [The key](versioning.md#the-key),
+  before you trust a byte of it.
 
 **The join mark.** A client that will say HELLO puts two characters past the
 end of its machine name in the join request. Of the name's 32 16-bit
