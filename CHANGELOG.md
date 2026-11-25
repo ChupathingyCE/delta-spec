@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+- Account marks: the device certificate's capabilities field keeps bits 0
+  to 23 for capabilities, and its top byte holds marks the issuing network
+  vouches for about the account. Mark 0x01000000 is `developer`. A mark
+  grants nothing, counts only from a certificate that passed the verified
+  names checks and chains to the root keys of a network the client knows,
+  and a certificate that carries one lasts 2 days. Unknown marks are
+  ignored, so format 1 stays ([link.md](link.md#device-identity),
+  [registry.md](registry.md#device-certificates), registry.json's
+  `device_account_marks`, peer.md's "What shows").
 - Project 3 is GulchCE (chester), for its hosts' layout 2 tags
   ([registry.md](registry.md#projects), registry.json's `projects`,
   `DREF_PROJECT_GULCHCE` in the reference code).
