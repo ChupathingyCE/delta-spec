@@ -2,6 +2,27 @@
 
 ## Unreleased
 
+- Hosts of other projects' code can host with Delta. The tag's layout 2
+  names the host's project (a new registry table, Projects: 1 Chupathingy,
+  which writes layout 1 alone; 2 Content Evolved) and that project's own
+  version, in place of a wire. A client says HELLO to such a host and joins
+  it by its network version alone, never by a wire; a reader of layout 1
+  alone sees no tag and joins it by its number, as before. ports.md's
+  missing "If you host games from your port" says what a port host writes,
+  what it answers (WELCOME, ROSTER, LEGACY, BYE), the join mark it clears
+  and waits on, the record it sends for each number, and what it never
+  claims ([peer.md](peer.md#the-tag),
+  [ports.md](ports.md#if-you-host-games-from-your-port),
+  [registry.md](registry.md#projects), registry.json's `projects`).
+  The reference client writes and reads it (`dref_advert_write_project`,
+  `dref_advert_read`'s `project`), writes ROSTER (`dref_roster_write`) and
+  reads nothing from a Content Evolved modded game's bytes (`modded`);
+  `conformance.py advert` passes a valid layout 2 tag, `check --host`
+  checks what a port's host sends, and `listen --project` stands in for a
+  port host.
+- Listing stamp byte 2, `map_source`, is Content Evolved's: its map source
+  ([registry.md](registry.md#listing-stamp)).
+
 - Content Evolved's numbers, at Watanoge's request: a version word of
   0xFF00 to 0xFFFF in the advertisement is a Content Evolved modded game,
   whose 26 reserved bytes are all Content Evolved's; listing flag 64

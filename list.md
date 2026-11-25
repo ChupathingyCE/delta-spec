@@ -163,7 +163,11 @@ announce it:
   (`myport 0.3`, never a Chupathingy version) and your platform key in
   `platform_key`, with your platform's number from the registry
   ([registry.md](registry.md#platforms)). Send `delta` `0` unless your
-  host answers HELLO.
+  host answers HELLO; then send your major, `1`. The list doesn't carry
+  your project yet, so a client may take a game with `delta` `1` for a
+  host of its own wire: it learns otherwise from your advertisement's tag
+  (layout 2, [peer.md](peer.md#the-tag)) when it joins, and joins by your
+  number. Announce a number the clients you want can join.
 - **Announce on change, plus a keep-alive.** Chupathingy's hosts announce
   when the game changes (players join or leave, the map or the game type
   changes), at most once every 3 seconds, and otherwise every 20 seconds

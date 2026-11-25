@@ -48,9 +48,9 @@ belongs to this repository.
   (registry.md, "Labels").
 - **`chupa-*` wire IDs are Chupathingy's.** They name revisions of
   Chupathingy's own code and are listed for reference only. Another
-  implementation leaves the tag out ([ports.md](ports.md#the-advertisement)),
-  or uses a prefix of its own once the wire rule for other implementations
-  is settled.
+  implementation's host leaves the tag out, or writes a layout 2 tag with
+  its own project number (registry.md, "Projects";
+  [ports.md](ports.md#if-you-host-games-from-your-port)).
 
 ## Implementation notes
 
