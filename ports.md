@@ -26,8 +26,9 @@ test against.
    nothing lost. That's [the handshake](peer.md#handshake).
 4. Offer one capability, `platform` (bit 0). It tells the host what your
    machine can take, so the host keeps the game to your limits.
-5. Read the host's advertisement, and when you host, write yours without a
-   Delta tag ([below](#the-advertisement)).
+5. Read the host's advertisement to know whether to say HELLO
+   ([below](#the-advertisement)). If your port hosts games too, see
+   [If you host games from your port](#if-you-host-games-from-your-port).
 6. Run the tests in [Testing your port](#testing-your-port) until they pass.
 
 Nobody needs an account for any of this. Accounts, profiles, friends,
@@ -45,7 +46,7 @@ Read these in [peer.md](peer.md), in this order:
 | HELLO, WELCOME, LEGACY, BYE, ROSTER | [Handshake](peer.md#handshake), [Wire format](peer.md#wire-format), [Examples](peer.md#examples) | send HELLO, read WELCOME (use only `agreed` bits you offered), accept LEGACY of any major, send BYE when you leave, read the ROSTER's room limit if you like |
 | Capability bits | [Capability registry](peer.md#capability-registry) | offer bit 0 alone; never 5, 9, 12 or 18; ignore bits you don't know |
 | Platform key | [Platform keys](peer.md#platform-keys), [Platform policy](peer.md#platform-policy) | your number, your hosting and join limits, your memory |
-| The advertisement | [The advertisement](peer.md#the-advertisement) | read the tag to know whether to say HELLO; write OpenCE's fields alone |
+| The advertisement | [The advertisement](peer.md#the-advertisement) | read the tag to know whether to say HELLO; if you host, what to write is [below](#if-you-host-games-from-your-port) |
 | The join mark | [The join mark](peer.md#the-join-mark) | optional: mark your join so a Delta host waits for your HELLO |
 | Version rules | [The legacy number](versioning.md#the-legacy-number), [The signed table](versioning.md#the-signed-table) | which numbers you join and announce |
 
@@ -57,13 +58,13 @@ thousands of random and cut-short datagrams.
 
 ### The advertisement
 
-A wire ID names a revision of Chupathingy's own game code, so a port of other
-code has none, and a Delta tag would tell our clients to join you by rules
-your code doesn't follow. When you host, write the network version, the flags
-and the kind ([The advertisement](peer.md#the-advertisement)) and leave bytes
-4 to 25 zero. Our clients join your game by its number, as they join any host
-without Delta. When you join, read the host's tag (or the old layout) only to
-decide whether to say HELLO; `dref_advert_read` does it.
+When you join, read the host's tag (or the old layout) only to decide
+whether to say HELLO; `dref_advert_read` does it. A host with a tag of
+layout 1 runs Chupathingy's code; one of layout 2 runs another project's
+(`project` says which). Say HELLO to both, and join both by your own
+number rules: neither tag changes which numbers your port plays. What to
+write in your own, if your port hosts, is in
+[If you host games from your port](#if-you-host-games-from-your-port).
 
 ### The game list
 
@@ -75,7 +76,7 @@ and invites work without it.
   there is listed with us too, labeled as OpenCE's protocol.
 - **Announcing to our list directly** (`POST /v1/announce`, form encoded)
   needs an internet invite our tunnel can reach. If you do it, add the Delta
-  fields: `delta` (0, since you don't answer HELLO as a host), `platform_key`
+  fields: `delta` (0, or 1 if your host answers HELLO), `platform_key`
   (16 lowercase hex digits), `arch`, `build` and `capabilities` (8 hex
   digits). `dref_announce_fields` writes exactly what our own builds write.
   The rest of the form is in [Delta List](list.md#delta-list).
@@ -241,16 +242,106 @@ needs can change without a release of ours and without moving the console
 floor for everyone else. Until then, tell us your N when you ask for your
 platform number, and we track it by hand.
 
-## Hosting with Delta
+## If you host games from your port
 
-A port that hosts plays fine with our clients with no Delta at all: they
-join it by its number, as they join OpenCE's hosts. Answering HELLO as a
-host (WELCOME, the roster, keeping the room to every machine's limit) is
-more work, and its advertisement needs an answer we don't have yet: a tag
-carries a wire ID, and wire IDs name revisions of our code. If your port
-wants to host with Delta, open an issue and we'll work out the wire rule for
-ports together. The reference client already writes WELCOME, so the bytes
-are covered.
+A wire ID names a revision of Chupathingy's own game code, so a port of
+other code has none, and it never writes the tag's layout 1: that would
+tell our clients to join you by rules your code doesn't follow. You have
+two ways to host.
+
+**Without Delta** (the simple one). Write the network version, the flags
+and the kind ([The advertisement](peer.md#the-advertisement)) and leave
+bytes 4 to 25 zero (`dref_advert_write`). Our clients join your game by its
+number, as they join any host without Delta, and say no HELLO. A port that
+hosts plays fine with our clients this way, with no Delta at all.
+
+**With Delta.** Your host answers HELLO, and says so with a tag of layout 2
+([The tag](peer.md#the-tag)): your project's number and your project's own
+version. It's more work than joining. Here is all of it:
+
+1. **Get a project number** ([registry.md](registry.md#projects)), the
+   same way as a platform number. One number for your project, on every
+   platform. Never pick one, and never write 1 (Chupathingy's) or another
+   project's.
+2. **Write the tag** with `dref_advert_write_project`: OpenCE's fields at
+   the front as before, bytes 4 to 16 zero, and the tag at 17 to 25 (`'D'`,
+   `'L'`, major 1, layout 2, your project, your version in two bytes, a 0,
+   the check). Your version is yours to define (a protocol revision, a
+   release number); other projects' readers show it and never join by it.
+   Write the tag only while your Delta socket is open on port 5160 and you
+   answer HELLO, and clear it when you stop. A game whose version word is
+   0xFF00 or more is Content Evolved's modded layout, whose bytes are all
+   its own: no tag there.
+3. **Answer HELLO** ([Handshake](peer.md#handshake)). Take a HELLO only
+   from a machine of your game: from that machine's address, with the
+   machine index you gave it. Answer WELCOME with your major, the
+   capabilities you offer, `agreed` (the bits both of you offer, and only
+   those you speak in full: `platform` alone is a fine start), your network
+   version, your own machine index (255 for a dedicated server), your build
+   text, your platform key and `0xFFFFFFFF` for the legacy table. A HELLO of
+   another major gets LEGACY and nothing more. HELLO comes again every
+   500 ms until answered: answer each one, and keep one session per machine.
+   `dref_welcome_write` writes WELCOME.
+4. **Send the roster** ([Wire format](peer.md#wire-format), ROSTER) to
+   each Delta machine when the room changes (at most every 250 ms) and
+   every 5 seconds, with the room's player limit: the smallest of your own
+   hosting limit and every Delta machine's join limit
+   ([Platform policy](peer.md#platform-policy)). Take no more players than
+   that. `dref_roster_write` writes it. Say BYE to a Delta machine you
+   drop, and forget its session when it says BYE or leaves.
+5. **Clear the join mark** ([The join mark](peer.md#the-join-mark)). Every
+   join request's machine name may have two characters past its end. Clear
+   everything past the name's end before you use the name or send it to
+   anyone, marked or not, so no other machine ever sees the mark.
+   `dref_join_mark_read` says whether it was marked and clears it.
+6. **Wait for a marked machine's HELLO.** For a marked join, wait up to 4
+   seconds for that machine's HELLO before you send it its game settings
+   record. An unmarked machine starts at once: never hold an OpenCE player.
+7. **Send the record of the older number.** Each Delta machine gets the
+   game settings record of the older of two numbers: the one you announce,
+   and the one in its HELLO. A machine without Delta, or whose HELLO didn't
+   come in time, gets the record of the number you announce. If your code
+   has only your own number's record, announce that number: a machine
+   that can't read the record then drops out on its own, as the legacy
+   protocol does with any record it doesn't know.
+
+What our clients do with your tag: they say HELLO, mark their join, and
+join your game by your number, exactly or within the range of numbers they
+play (11 to 45 today), as with a host without Delta. They show your
+project's name in their system link list. They never read a wire into it, and use
+nothing a WELCOME didn't agree to. A build of ours from before the tag's
+layout 2 sees no tag: it joins you by your number and says no HELLO, and
+plays as before.
+
+**What not to claim**, anywhere:
+
+- no tag of layout 1, no wire ID, and no `chupa-` text in your tag, your
+  build text or your listing;
+- no project number but your own;
+- nothing of the old layout ([peer.md](peer.md#the-old-layout)), beside the
+  tag or without it: byte 3 is the game's kind, bytes 4 to 16 stay zero,
+  and the flag 0x04 is set only by a dedicated server announcing 39 or
+  later, never as the old Delta flag with a wire ID after it. Released
+  builds of ours still read the old layout and would join you as our own
+  wire; `conformance.py advert` fails it;
+- no capability in `agreed` that you don't speak in full, and none of the
+  bits a HELLO never carries (5, 9, 12 and 18);
+- no legacy table serial but `0xFFFFFFFF` unless your host checks and
+  serves signed tables ([The signed table](versioning.md#the-signed-table));
+- no tag while your Delta socket is closed, or while you don't answer
+  HELLO.
+
+**On our list**, announce `delta` `1` once your host answers HELLO
+([Announcing from another client](list.md#announcing-from-another-client)).
+The list doesn't carry your project yet: our Online Games list shows your
+game as a Delta host, and our client learns your project from your
+advertisement when it joins.
+
+To test your host: `conformance.py advert` checks its advertisement
+(including the tag), `conformance.py check --host` the WELCOME, ROSTER,
+LEGACY and BYE it sends, and one of our clients against your host on
+loopback the whole thing. Our client's log says "joining a Delta host of
+another project" with your project's number and your version.
 
 ## Testing your port
 
@@ -315,7 +406,18 @@ python3 reference/conformance.py listen --seconds 60
 
 `listen` is a stand-in host on 127.0.0.1:5160: it answers HELLO with
 WELCOME, sends a roster every 5 seconds, and checks what you send. It plays
-no game.
+no game. With `--project 2` (and `--project-version`, `--announce`) it
+stands in for a port host of that project: it prints the advertisement
+bytes such a host writes, for your advertisement reader, and its WELCOME
+names that project.
+
+If your port hosts with Delta, check what your host writes too: its
+advertisement, and the datagrams it sends a client, as hex one a line:
+
+```sh
+python3 reference/conformance.py advert 2c00010000000000000000000000000000444c010202030000af
+python3 reference/conformance.py check --host my-host-packets.txt
+```
 
 **Play against the real server.** On a Linux, macOS or Windows (WSL)
 machine with the server program and your maps:
@@ -365,7 +467,11 @@ defaults, and the script's settings win over it.
       and port with your session, and ignore every other type.
 - [ ] You say BYE when you leave.
 - [ ] Your advertisement passes `conformance.py advert`: your N, the flags,
-      and no Delta tag.
+      and no Delta tag, or, if your host answers HELLO, a tag of layout 2
+      with your project's number.
+- [ ] If your host answers HELLO, what it sends passes
+      `conformance.py check --host`, it clears the join mark from every
+      name, and one of our clients joins it and its log says your project.
 - [ ] Against `loopback_host.sh`, your port joins, the server's log says
       your machine speaks Delta with your platform, and the game's player
       limit drops to your join limit.
