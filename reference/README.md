@@ -20,7 +20,8 @@ python3 conformance.py --help
 | `delta_ref.h`, `delta_ref.c` | the client: no allocation, no threads, no OS calls but your send function |
 | `delta_ref_test.c`, `golden.h` | its tests, against packets our own code wrote |
 | `delta_layout.h`, `delta_layout.c` | layout facts by network version (11 to 45, and a signed table's facts past 44) and the game settings record's converter between versions' layouts ([versioning.md](../versioning.md#layout-facts-by-network-version)) |
-| `delta_layout_test.c` | its tests: 32's, 41's and 44's records each way, Content Evolved's plain record at 44, a table's facts |
+| `delta_layout_test.c` | its tests: 32's, 41's and 44's records each way, Content Evolved's plain record at 44, a table's facts (wrapping values too), the fuzz target on its regression inputs |
+| `fuzz_layout.c` | a fuzz target for the layouts and the converter (libFuzzer with `-DDELTA_LAYOUT_LIBFUZZER`) |
 | `conformance.py` | checks a port's packets (and a port host's, with `check --host`) and its advertisement, or stands in for a host on 127.0.0.1 (for a port host, with `listen --project`); `layout`, `record` and `convert` check a port's game settings records for a network version against `layouts.json` |
 | `conformance_test.py` | conformance.py's own checks (`python3 conformance_test.py`), and `layouts.json` and conformance.py's converter held to `delta_layout.c` |
 | `federation_vectors.json` | test vectors for federation ([link.md](../link.md#networks)): two networks' roots.json, certificates and a signed list of networks, TEST keys only. delta-server's `node/federation.py` (MIT) reads and checks them |
