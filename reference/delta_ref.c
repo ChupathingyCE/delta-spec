@@ -556,6 +556,23 @@ int dref_join_mark(uint16_t *name, int count)
 	return 1;
 }
 
+int dref_join_mark_read(uint16_t *name, int count)
+{
+	int end = 0, marked, index;
+
+	if (!name || count < 4)
+		return 0;
+	while (end < count && name[end])
+		end++;
+	if (end >= count)
+		return 0;
+	marked = end <= count - 4 && name[count - 3] == DREF_JOIN_MARK_FIRST && name[count - 2] == DREF_JOIN_MARK_SECOND &&
+		!name[count - 1];
+	for (index = end; index < count; index++)
+		name[index] = 0;
+	return marked;
+}
+
 /* ---------- the game list */
 
 static int form_put(char *form, int size, int *used, const char *name, const char *value)

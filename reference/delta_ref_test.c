@@ -267,6 +267,29 @@ static void test_advert_project(void)
 	CHECK(dref_advert_read(reserved, (int)sizeof(reserved), &advert) && advert.modded && !advert.has_tag);
 }
 
+static void test_join_mark_read(void)
+{
+	uint16_t name[32];
+	int index, clear;
+
+	memset(name, 0, sizeof(name));
+	name[0] = 'N';
+	name[1] = '6';
+	CHECK(dref_join_mark(name, 32));
+	CHECK(dref_join_mark_read(name, 32));
+	for (index = 2, clear = 1; index < 32; index++)
+		clear &= name[index] == 0;
+	CHECK(clear && name[0] == 'N');
+	/* (unmarked: 0, and stray characters past the end cleared too) */
+	name[20] = 0x1234;
+	CHECK(!dref_join_mark_read(name, 32) && name[20] == 0);
+	/* (a name with no end is left alone) */
+	for (index = 0; index < 32; index++)
+		name[index] = 'a';
+	CHECK(!dref_join_mark_read(name, 32) && name[31] == 'a');
+	CHECK(!dref_join_mark_read(NULL, 32) && !dref_join_mark_read(name, 3));
+}
+
 static void test_roster_write(void)
 {
 	struct dref_header header;
@@ -509,6 +532,7 @@ int main(int argc, char **argv)
 	test_advert();
 	test_advert_project();
 	test_roster_write();
+	test_join_mark_read();
 	test_join_mark();
 	test_announce();
 	test_handshake();

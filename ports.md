@@ -293,6 +293,7 @@ version. It's more work than joining. Here is all of it:
    join request's machine name may have two characters past its end. Clear
    everything past the name's end before you use the name or send it to
    anyone, marked or not, so no other machine ever sees the mark.
+   `dref_join_mark_read` says whether it was marked and clears it.
 6. **Wait for a marked machine's HELLO.** For a marked join, wait up to 4
    seconds for that machine's HELLO before you send it its game settings
    record. An unmarked machine starts at once: never hold an OpenCE player.
@@ -317,9 +318,12 @@ plays as before.
 - no tag of layout 1, no wire ID, and no `chupa-` text in your tag, your
   build text or your listing;
 - no project number but your own;
-- nothing of the old layout ([peer.md](peer.md#the-old-layout)): byte 3 is
-  the game's kind, bytes 4 to 16 stay zero, and the flag 0x04 is set only
-  by a dedicated server announcing 39 or later;
+- nothing of the old layout ([peer.md](peer.md#the-old-layout)), beside the
+  tag or without it: byte 3 is the game's kind, bytes 4 to 16 stay zero,
+  and the flag 0x04 is set only by a dedicated server announcing 39 or
+  later, never as the old Delta flag with a wire ID after it. Released
+  builds of ours still read the old layout and would join you as our own
+  wire; `conformance.py advert` fails it;
 - no capability in `agreed` that you don't speak in full, and none of the
   bits a HELLO never carries (5, 9, 12 and 18);
 - no legacy table serial but `0xFFFFFFFF` unless your host checks and

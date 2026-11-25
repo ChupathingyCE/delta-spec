@@ -366,6 +366,11 @@ enum
 	DREF_JOIN_MARK_SECOND = 0x0001
 };
 int dref_join_mark(uint16_t *name, int count);
+/* a host's side: whether a join request's machine name (count 16-bit
+characters) has the mark, 1 if so; everything past the name's end is
+cleared either way, so no other machine sees it (a name not ended within
+count is left as it is) */
+int dref_join_mark_read(uint16_t *name, int count);
 
 /* ---------- the game list (Delta List) */
 

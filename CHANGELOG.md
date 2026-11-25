@@ -17,7 +17,9 @@
   The reference client writes and reads it (`dref_advert_write_project`,
   `dref_advert_read`'s `project`), writes ROSTER (`dref_roster_write`) and
   reads nothing from a Content Evolved modded game's bytes (`modded`);
-  `conformance.py advert` passes a valid layout 2 tag, `check --host`
+  `dref_join_mark_read` reads and clears the join mark on a host's side.
+  `conformance.py advert` passes a valid layout 2 tag (and fails one
+  beside the old layout's flag, major and wire ID), `check --host`
   checks what a port's host sends, and `listen --project` stands in for a
   port host.
 - Listing stamp byte 2, `map_source`, is Content Evolved's: its map source

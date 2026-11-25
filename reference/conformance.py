@@ -329,15 +329,19 @@ def check_host_datagram(report, where, data):
 
 def command_check(args):
     report = Report()
+    seen = 0
     for path in args.files:
         session = None
         for number, data in enumerate(read_datagrams(path), 1):
+            seen += 1
             if args.host:
                 check_host_datagram(report, f"{path}:{number}", data)
                 continue
             result = check_datagram(report, f"{path}:{number}", data, session)
             if result and result.get("type") == 1:
                 session = result["session"]
+    if not seen:
+        report.fail("check", "no datagrams in the files")
     return report
 
 
@@ -391,7 +395,15 @@ def command_advert(args):
                 report.fail(where, f"tag byte 7 (byte 24) is 0x{spare:02x}: reserved, write 0")
             said = (f"a port host's tag: project {project} ({PROJECTS.get(project, 'not in the registry')}), its "
                     f"version {project_version}; our clients say HELLO and join by your number")
-    if any(data[4:TAG_OFFSET]):
+    # (the old Delta layout, which released builds still read: the flag 0x04,
+    # a major at byte 3 and a wire ID after it. Any reader that sees that
+    # joins this host as a build of Chupathingy's code, tag or no tag)
+    slot = data[4:20].split(b"\0", 1)[0]
+    if flags & 0x04 and re.fullmatch(rb"chupa-[0-9]{1,3}[a-z]", slot):
+        report.fail(where, f"bytes 3 to {3 + len(slot)} are the old Delta layout (major {kind}, wire "
+                    f"{slot.decode('ascii')}): released builds join that as Chupathingy's own wire. Leave bytes 4 to "
+                    "16 zero")
+    elif any(data[4:TAG_OFFSET]):
         report.warn(where, "bytes 4 to 16 are not zero (nothing is defined there for a port)")
     (report.ok if not report.failed else report.seen)(where, f"network version {version}, flags 0x{flags:02x}, "
                                                         f"kind {kind}; {said}")
