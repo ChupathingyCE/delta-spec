@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+- Account marks: the device certificate's capabilities field keeps bits 0
+  to 23 for capabilities, and its top byte holds marks the issuing network
+  vouches for about the account. Mark 0x01000000 is `developer`. A mark
+  grants nothing, a client draws only its home network's marks (from a
+  bound proof that passed the verified names checks) and ignores another
+  network's, and a certificate that carries one lasts 2 days (revoking the
+  device is the fast path). Unknown marks are
+  ignored, so format 1 stays ([link.md](link.md#device-identity),
+  [registry.md](registry.md#device-certificates), registry.json's
+  `device_account_marks`, peer.md's "What shows").
 - The advertisement's flag 0x08 and byte 4 (the MCC network protocol, from
   GulchCE) are reserved: older GulchCE builds used them, and no current
   build sets them ([peer.md](peer.md#mcc-games),
