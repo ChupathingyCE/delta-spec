@@ -2,6 +2,20 @@
 
 ## Unreleased
 
+- Layout facts by network version: one section with everything a client
+  handles differently for a host of each version from 11 to 45 (the game
+  settings record's fixed fields, its size, options, local data and
+  trailing bytes by version, the further options' bytes, the join request,
+  the distributed header, unit state parts, messages added and dropped,
+  and Content Evolved's row at 44), the same facts as data in
+  `layouts.json`, and "Playing a range": how a client of another project
+  uses them, the signed table and Delta's HELLO to join every host from 11
+  to 45 ([versioning.md](versioning.md#layout-facts-by-network-version)).
+  The signed table's 16 KB cap and its compact encoding are written down
+  ([versioning.md](versioning.md#size-and-encoding)). The reference code
+  gains `delta_layout.h` and `delta_layout.c` (MIT): the facts, a signed
+  table's facts within the limits, and the record converted between any
+  two layouts; `conformance.py` gains `layout`, `record` and `convert`.
 - Hosts of other projects' code can host with Delta. The tag's layout 2
   names the host's project (a new registry table, Projects: 1 Chupathingy,
   which writes layout 1 alone; 2 Content Evolved) and that project's own

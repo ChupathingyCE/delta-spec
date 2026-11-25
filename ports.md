@@ -90,7 +90,8 @@ Each game has one network version: the number its host announces.
 
 - **Your client, joining a host without a Delta tag** (OpenCE's, or another
   port's): join only a host whose number you play. That's OpenCE's rule, an
-  exact match, unless your code really plays a range.
+  exact match, unless your code really plays a range: the facts for that
+  are in [Playing a range](versioning.md#playing-a-range).
 - **Your client, joining a Delta host:** say your N in HELLO.
   **A Delta host sends each Delta machine the game settings record of the
   older of two numbers: the one it announces, and the one in that
