@@ -12,6 +12,10 @@
   ignored, so format 1 stays ([link.md](link.md#device-identity),
   [registry.md](registry.md#device-certificates), registry.json's
   `device_account_marks`, peer.md's "What shows").
+- The advertisement's flag 0x08 and byte 4 (the MCC network protocol, from
+  GulchCE) are reserved: older GulchCE builds used them, and no current
+  build sets them ([peer.md](peer.md#mcc-games),
+  [registry.md](registry.md#lan-advertisement)).
 - Project 3 is GulchCE (chester), for its hosts' layout 2 tags
   ([registry.md](registry.md#projects), registry.json's `projects`,
   `DREF_PROJECT_GULCHCE` in the reference code).
