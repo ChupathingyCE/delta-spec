@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Project 3 is GulchCE (chester), for its hosts' layout 2 tags
+  ([registry.md](registry.md#projects), registry.json's `projects`,
+  `DREF_PROJECT_GULCHCE` in the reference code).
 - Layout facts by network version: one section with everything a client
   handles differently for a host of each version from 11 to 45 (the game
   settings record's fixed fields, its size, options, local data and
